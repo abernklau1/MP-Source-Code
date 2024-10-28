@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/Users/abernklau/School/Mines/fall2024/Graphics/Assignments/A3/src/build",
+  "command": "/usr/bin/clang++  -I/usr/local/include -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -o CMakeFiles/a3.dir/main.cpp.o -c /Users/abernklau/School/Mines/fall2024/Graphics/Assignments/A3/src/main.cpp",
+  "file": "/Users/abernklau/School/Mines/fall2024/Graphics/Assignments/A3/src/main.cpp",
+  "output": "CMakeFiles/a3.dir/main.cpp.o"
+},
+{
+  "directory": "/Users/abernklau/School/Mines/fall2024/Graphics/Assignments/A3/src/build",
+  "command": "/usr/bin/clang++  -I/usr/local/include -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -o CMakeFiles/a3.dir/A3Engine.cpp.o -c /Users/abernklau/School/Mines/fall2024/Graphics/Assignments/A3/src/A3Engine.cpp",
+  "file": "/Users/abernklau/School/Mines/fall2024/Graphics/Assignments/A3/src/A3Engine.cpp",
+  "output": "CMakeFiles/a3.dir/A3Engine.cpp.o"
+},
+{
+  "directory": "/Users/abernklau/School/Mines/fall2024/Graphics/Assignments/A3/src/build",
+  "command": "/usr/bin/clang++  -I/usr/local/include -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk -o CMakeFiles/a3.dir/Tav.cpp.o -c /Users/abernklau/School/Mines/fall2024/Graphics/Assignments/A3/src/Tav.cpp",
+  "file": "/Users/abernklau/School/Mines/fall2024/Graphics/Assignments/A3/src/Tav.cpp",
+  "output": "CMakeFiles/a3.dir/Tav.cpp.o"
+}
+]
