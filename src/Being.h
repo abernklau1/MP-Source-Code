@@ -32,12 +32,11 @@ public:
     void setForwardDirection( );
     void moveForward( GLfloat movementFactor );
     void moveBackward( GLfloat movementFactor );
-
+    float toRotate = 0;
 private:
     glm::vec3 _forwardDirection;
     glm::vec3 _position;
     int moveNoseBy =0;
-    float toRotate = 0;
     glm::vec3 facing;
     /// \desc current angle of rotation for the propeller
     GLfloat _propAngle;

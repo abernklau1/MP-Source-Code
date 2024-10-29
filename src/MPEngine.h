@@ -10,11 +10,13 @@
 #include "Tav.h"
 #include "Being.h"
 #include "FreeCam.h"
+#include "FirstPerson.hpp"
 #include <vector>
 
 class MPEngine final : public CSCI441::OpenGLEngine
 {
   public:
+    float _angle = 0;
     MPEngine( );
     ~MPEngine( ) final;
 
@@ -38,7 +40,9 @@ class MPEngine final : public CSCI441::OpenGLEngine
     static constexpr GLfloat MOUSE_UNINITIALIZED = -9999.0f;
 
   private:
+    bool _toggleFirst =false;
     FreeCam* _pFreeCam;
+    FirstPerson* _pFirstPersonCam;
     // parameters to make up our grid size and spacing, feel free to
     // play around with this
     const GLfloat GRID_WIDTH          = WORLD_SIZE * 1.8f;

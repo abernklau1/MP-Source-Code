@@ -22,7 +22,6 @@ GLfloat getRand( ) { return (GLfloat)rand( ) / (GLfloat)RAND_MAX; }
 MPEngine::MPEngine( )
     : CSCI441::OpenGLEngine( 4, 1, 640, 480, "MP: Tav" )
 {
-  _pFreeCam = new FreeCam();
   for ( auto& _key : _keys )
     _key = GL_FALSE;
 
@@ -43,12 +42,12 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
 
   if ( action == GLFW_PRESS ||  action == GLFW_REPEAT)
   {
-    if (_keys[GLFW_KEY_Y])
+    if (_keys[GLFW_KEY_Y] && _pActiveCamera==_pFreeCam)
     {
       _pFreeCam->moveForward(0.1);
       _pArcballCam->setCameraPosition(_pFreeCam->getPosition());
     }
-    if (_keys[GLFW_KEY_H])
+    if (_keys[GLFW_KEY_H] && _pActiveCamera==_pFreeCam)
     {
       _pFreeCam->moveBackward(0.1);
       _pArcballCam->setCameraPosition(_pFreeCam->getPosition());
@@ -57,6 +56,7 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
       _pActiveCamera = _pArcballCam;
 
     }
+
     else if(key==GLFW_KEY_2) {
       glm::vec3 targetPosition;
       if(_currentCharacter==0) {
@@ -82,11 +82,14 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
       _pFreeCam->recomputeOrientation();
       _pActiveCamera = _pFreeCam;
     }
+    if(key == GLFW_KEY_3) {
+      _toggleFirst = !_toggleFirst;
+    }
     switch ( key )
     {
       // Toggle cameras
-      case GLFW_KEY_T: _currentCharacter=0; break;
-      case GLFW_KEY_B: _currentCharacter=1; break;
+      case GLFW_KEY_T: _currentCharacter=0; _angle=_pTav->_rotationY; break;
+      case GLFW_KEY_B: _currentCharacter=1; _angle =_pBeing->toRotate; break;
       // quit!
       case GLFW_KEY_Q:
       case GLFW_KEY_ESCAPE: setWindowShouldClose( ); break;
@@ -283,12 +286,18 @@ void MPEngine::_generateEnvironment( )
 void MPEngine::mSetupScene( )
 {
   _pArcballCam             = new ArcBall( );
+  _pFreeCam = new FreeCam();
+  _pFirstPersonCam = new FirstPerson();
   glm::vec3 targetPosition;
+  glm::vec3 targetDirection;
   if(_currentCharacter==0) {
     targetPosition = _pTav->getPosition( );
+    targetDirection = _pTav->getForwardDirection( );
+
   }
   if(_currentCharacter==1) {
     targetPosition = _pBeing->getPosition( );
+    targetDirection = _pBeing->getForwardDirection( );
   }
 
   // Define an offset vector for the camera
@@ -321,6 +330,11 @@ void MPEngine::mSetupScene( )
     _pFreeCam->setTheta(theta);
     _pFreeCam->setPhi(phi);
     _pFreeCam->recomputeOrientation();
+  //_pFirstPersonCam->setCameraPosition( targetPosition );
+  //_pFirstPersonCam->setCameraDirection( targetDirection );
+  //printf("the position is: %d,%d,%d\n", targetPosition.x, targetPosition.y, targetPosition.z);
+  //printf("the direction is: %d,%d,%d\n", targetDirection.x, targetDirection.y, targetDirection.z);
+  //_pFirstPersonCam->recomputeOrientation( );
 
   _pActiveCamera = _pArcballCam;
   _cameraSpeed   = glm::vec2( 0.25f, 0.02f );
@@ -443,6 +457,7 @@ void MPEngine::_updateScene( )
     if(_currentCharacter==1) {
       newPosition += _pBeing->getForwardDirection( ) * _pTav->tavSpeed;
     }
+
   }
   if ( _keys[GLFW_KEY_S] || _keys[GLFW_KEY_DOWN] )
   {
@@ -452,6 +467,7 @@ void MPEngine::_updateScene( )
     if(_currentCharacter==1) {
       newPosition -= _pBeing->getForwardDirection()* _pTav->tavSpeed;
     }
+
   }
   if ( _keys[GLFW_KEY_D] || _keys[GLFW_KEY_RIGHT] )
   {
@@ -461,6 +477,7 @@ void MPEngine::_updateScene( )
     if(_currentCharacter==1) {
       _pBeing->rotateSelf(-_pTav->tavRotationSpeed);
     }
+    _angle -= _pTav->tavRotationSpeed;
   }
   if ( _keys[GLFW_KEY_A] || _keys[GLFW_KEY_LEFT] )
   {
@@ -470,6 +487,7 @@ void MPEngine::_updateScene( )
     if(_currentCharacter==1) {
       _pBeing->rotateSelf(_pTav->tavRotationSpeed);
     }
+    _angle += _pTav->tavRotationSpeed;
   }
 
   // Calculate the direction of movement
@@ -485,13 +503,17 @@ void MPEngine::_updateScene( )
   }
 
   // Update the camera's position by adding the direction to the current position
+
   _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
+  _pFirstPersonCam->setTheta( _angle );
+  _pFirstPersonCam->setPhi( 0 );
+  _pFirstPersonCam->setCameraDirection(direction);
+  _pFirstPersonCam->setCameraPosition(position+glm::vec3(0.0f,1.0f,0.0f));
+  //_pFirstPersonCam->updatePosition( position, direction );
+  _pFirstPersonCam->recomputeOrientation();
 
   // Update the camera's look-at point to be the player's position
   _pArcballCam->setCameraLookAtPoint( position );
-
-
-
 
 
   if(_currentCharacter==0) {
@@ -525,6 +547,13 @@ void MPEngine::run( )
 
     // draw everything to the window
     _renderScene( _pActiveCamera->getViewMatrix( ), _pActiveCamera->getProjectionMatrix( ) );
+
+    if(_toggleFirst) {
+      printf("first person toggled\n");
+      glViewport(0, 0, 200, 200);
+      glClear(GL_DEPTH_BUFFER_BIT);
+      _renderScene(_pFirstPersonCam->getViewMatrix(), _pFirstPersonCam->getProjectionMatrix( ) );
+    }
 
     _updateScene( );
 
