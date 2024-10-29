@@ -24,11 +24,8 @@ public:
     void drawPerson( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx );
 
     /// \desc simulates the plane flying forward by rotating the propeller clockwise
-    void flyForward();
-    /// \desc simulates the plane flying backward by rotating the propeller counter-clockwise
-    void flyBackward();
     void rotateSelf(GLfloat rotationFactor);
-    void moveNose(int moveBy);
+    void moveNose();
     glm::vec3 getPosition( );
     void setPosition( glm::vec3 position );
     glm::vec3 getForwardDirection( );

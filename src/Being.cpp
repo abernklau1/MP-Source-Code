@@ -42,8 +42,8 @@ void Being::rotateSelf(GLfloat rotationFactor) {
 void Being::moveForward( GLfloat movementFactor ) { _position += _forwardDirection * movementFactor; }
 
 void Being::moveBackward( GLfloat movementFactor ) { _position -= _forwardDirection * movementFactor; }
-void Being::moveNose(int moveBy) {
-    moveNoseBy = moveBy;
+void Being::moveNose() {
+    moveNoseBy = (moveNoseBy+1)%6;
 }
 void Being::drawPerson( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx ) {
 
