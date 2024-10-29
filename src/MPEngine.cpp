@@ -1,4 +1,8 @@
 #include "MPEngine.h"
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
 //*************************************************************************************
 //
@@ -18,7 +22,7 @@ GLfloat getRand( ) { return (GLfloat)rand( ) / (GLfloat)RAND_MAX; }
 MPEngine::MPEngine( )
     : CSCI441::OpenGLEngine( 4, 1, 640, 480, "MP: Tav" )
 {
-
+  _pFreeCam = new FreeCam();
   for ( auto& _key : _keys )
     _key = GL_FALSE;
 
@@ -37,13 +41,52 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
   if ( key != GLFW_KEY_UNKNOWN )
     _keys[key] = ( ( action == GLFW_PRESS ) || ( action == GLFW_REPEAT ) );
 
-  if ( action == GLFW_PRESS )
+  if ( action == GLFW_PRESS ||  action == GLFW_REPEAT)
   {
+    if (_keys[GLFW_KEY_Y])
+    {
+      _pFreeCam->moveForward(0.1);
+      _pArcballCam->setCameraPosition(_pFreeCam->getPosition());
+    }
+    if (_keys[GLFW_KEY_H])
+    {
+      _pFreeCam->moveBackward(0.1);
+      _pArcballCam->setCameraPosition(_pFreeCam->getPosition());
+    }
+    if(key==GLFW_KEY_1) {
+      _pActiveCamera = _pArcballCam;
+
+    }
+    else if(key==GLFW_KEY_2) {
+      glm::vec3 targetPosition;
+      if(_currentCharacter==0) {
+        targetPosition = _pTav->getPosition( );
+      }
+      if(_currentCharacter==1) {
+        targetPosition = _pBeing->getPosition( );
+      }
+
+      _pFreeCam->setPosition(_pArcballCam->getPosition());
+
+      _pFreeCam->setPosition(_pArcballCam->getPosition());
+
+      // Compute the direction vector for FreeCam
+      glm::vec3 freeCamDirection = glm::normalize(targetPosition - _pFreeCam->getPosition());
+
+      // Compute Theta and Phi based on FreeCam's definitions
+      GLfloat phi = acos(freeCamDirection.y);
+      GLfloat theta = atan2(freeCamDirection.z, freeCamDirection.x);
+
+      _pFreeCam->setTheta(theta);
+      _pFreeCam->setPhi(phi);
+      _pFreeCam->recomputeOrientation();
+      _pActiveCamera = _pFreeCam;
+    }
     switch ( key )
     {
       // Toggle cameras
-      case GLFW_KEY_1: _pActiveCamera = _pArcballCam; break;
-      case GLFW_KEY_2: _pActiveCamera = _pArcballCam; break;
+      case GLFW_KEY_T: _currentCharacter=0; break;
+      case GLFW_KEY_B: _currentCharacter=1; break;
       // quit!
       case GLFW_KEY_Q:
       case GLFW_KEY_ESCAPE: setWindowShouldClose( ); break;
@@ -83,13 +126,19 @@ void MPEngine::handleCursorPositionEvent( glm::vec2 currMousePosition )
     if ( _keys[GLFW_KEY_LEFT_SHIFT] || _keys[GLFW_KEY_RIGHT_SHIFT] )
     {
       // Zoom based on vertical mouse movement
-      float zoomAmount = ( currMousePosition.y - _mousePosition.y ) * 0.01f;
-      _pArcballCam->zoom( zoomAmount );
+      if(_pActiveCamera==_pArcballCam) {
+        float zoomAmount = ( currMousePosition.y - _mousePosition.y ) * 0.01f;
+        _pArcballCam->zoom( zoomAmount );
+      }
     }
     else
     {
       // rotate the camera by the distance the mouse moved
-      _pArcballCam->rotate( ( currMousePosition.x - _mousePosition.x ) * 0.005f, ( _mousePosition.y - currMousePosition.y ) * 0.005f );
+      if(_pActiveCamera==_pArcballCam) {
+        _pArcballCam->rotate( ( currMousePosition.x - _mousePosition.x ) * 0.005f, ( _mousePosition.y - currMousePosition.y ) * 0.005f );
+      } else {
+        _pFreeCam->rotate( ( currMousePosition.x - _mousePosition.x ) * 0.005f, ( _mousePosition.y - currMousePosition.y ) * 0.005f );
+      }
     }
   }
 
@@ -145,7 +194,8 @@ void MPEngine::mSetupBuffers( )
   // give the plane the normal matrix location
   _pTav =
       new Tav( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor );
-
+  _pBeing =
+      new Being( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor );
   _createGroundBuffers( );
   _generateEnvironment( );
 }
@@ -233,7 +283,13 @@ void MPEngine::_generateEnvironment( )
 void MPEngine::mSetupScene( )
 {
   _pArcballCam             = new ArcBall( );
-  glm::vec3 targetPosition = _pTav->getPosition( );
+  glm::vec3 targetPosition;
+  if(_currentCharacter==0) {
+    targetPosition = _pTav->getPosition( );
+  }
+  if(_currentCharacter==1) {
+    targetPosition = _pBeing->getPosition( );
+  }
 
   // Define an offset vector for the camera
   _cameraOffset = glm::vec3( 0.0f, 5.0f, 10.0f );
@@ -249,6 +305,22 @@ void MPEngine::mSetupScene( )
   _pArcballCam->setTheta( atan2( arcballDirection.z, arcballDirection.x ) );
   _pArcballCam->setPhi( acos( arcballDirection.y ) );
   _pArcballCam->recomputeOrientation( );
+
+
+  _pFreeCam->setPosition(_pArcballCam->getPosition());
+
+    _pFreeCam->setPosition(_pArcballCam->getPosition());
+
+    // Compute the direction vector for FreeCam
+    glm::vec3 freeCamDirection = glm::normalize(targetPosition - _pFreeCam->getPosition());
+
+    // Compute Theta and Phi based on FreeCam's definitions
+    GLfloat phi = acos(freeCamDirection.y);
+    GLfloat theta = atan2(freeCamDirection.z, freeCamDirection.x);
+
+    _pFreeCam->setTheta(theta);
+    _pFreeCam->setPhi(phi);
+    _pFreeCam->recomputeOrientation();
 
   _pActiveCamera = _pArcballCam;
   _cameraSpeed   = glm::vec2( 0.25f, 0.02f );
@@ -324,14 +396,19 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   //// END DRAWING THE BUILDINGS ////
 
   //// BEGIN DRAWING TAV ////
-  glm::mat4 modelMtx( 1.0f );
+  glm::mat4 modelMtx1( 1.0f );
 
-  modelMtx = glm::translate( modelMtx, _pTav->getPosition( ) );
+  modelMtx1 = glm::translate( modelMtx1, _pTav->getPosition( ) );
 
   // TODO: rotate tav without arcball
 
   // draw our Tav now
-  _pTav->drawTav( modelMtx, viewMtx, projMtx );
+  _pTav->drawTav( modelMtx1, viewMtx, projMtx );
+  glm::mat4 modelMtx2( 1.0f );
+  modelMtx2 = glm::translate( modelMtx2, _pBeing->getPosition() );
+  _pBeing->drawPerson( modelMtx2, viewMtx, projMtx );
+
+
   //// END DRAWING TAV ////
 }
 
@@ -344,42 +421,87 @@ void MPEngine::_updateScene( )
   const GLfloat maxZ = TOP_END_POINT;
 
   _pTav->update( );
+  _pBeing->moveNose();
 
   // Get the current position of the character
-  glm::vec3 currentPosition = _pTav->getPosition( );
+  glm::vec3 currentPosition;
+  if(_currentCharacter==0) {
+    currentPosition = _pTav->getPosition( );
+  }
+  if(_currentCharacter==1) {
+    currentPosition = _pBeing->getPosition( );
+  }
 
   // Calculate the new position based on input
   glm::vec3 newPosition = currentPosition;
 
   if ( _keys[GLFW_KEY_W] || _keys[GLFW_KEY_UP] )
   {
-    newPosition += _pTav->getForwardDirection( ) * _pTav->tavSpeed;
+    if(_currentCharacter==0) {
+      newPosition += _pTav->getForwardDirection( ) * _pTav->tavSpeed;
+    }
+    if(_currentCharacter==1) {
+      newPosition += _pBeing->getForwardDirection( ) * _pTav->tavSpeed;
+    }
   }
   if ( _keys[GLFW_KEY_S] || _keys[GLFW_KEY_DOWN] )
   {
-    newPosition -= _pTav->getForwardDirection( ) * _pTav->tavSpeed;
+    if(_currentCharacter==0) {
+      newPosition -= _pTav->getForwardDirection( ) * _pTav->tavSpeed;
+    }
+    if(_currentCharacter==1) {
+      newPosition -= _pBeing->getForwardDirection()* _pTav->tavSpeed;
+    }
   }
   if ( _keys[GLFW_KEY_D] || _keys[GLFW_KEY_RIGHT] )
   {
-
-    _pTav->rotate( -_pTav->tavRotationSpeed );
+    if(_currentCharacter==0) {
+      _pTav->rotate( -_pTav->tavRotationSpeed );
+    }
+    if(_currentCharacter==1) {
+      _pBeing->rotateSelf(-_pTav->tavRotationSpeed);
+    }
   }
   if ( _keys[GLFW_KEY_A] || _keys[GLFW_KEY_LEFT] )
   {
-    _pTav->rotate( _pTav->tavRotationSpeed );
+    if(_currentCharacter==0) {
+      _pTav->rotate( _pTav->tavRotationSpeed );
+    }
+    if(_currentCharacter==1) {
+      _pBeing->rotateSelf(_pTav->tavRotationSpeed);
+    }
   }
 
   // Calculate the direction of movement
-  glm::vec3 direction = _pTav->getPosition( ) - _pArcballCam->getLookAtPoint( );
+  glm::vec3 direction;
+  glm::vec3 position;
+  if(_currentCharacter==0) {
+    position = _pTav->getPosition( );
+    direction = position - _pArcballCam->getLookAtPoint( );
+  }
+  if(_currentCharacter==1) {
+    position = _pBeing->getPosition( );
+    direction = _pBeing->getPosition( ) - _pArcballCam->getLookAtPoint( );
+  }
 
   // Update the camera's position by adding the direction to the current position
   _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
 
   // Update the camera's look-at point to be the player's position
-  _pArcballCam->setCameraLookAtPoint( _pTav->getPosition( ) );
+  _pArcballCam->setCameraLookAtPoint( position );
 
-  _pTav->setForwardDirection( );
-  _pTav->setPosition( newPosition );
+
+
+
+
+  if(_currentCharacter==0) {
+    _pTav->setForwardDirection( );
+    _pTav->setPosition( newPosition );
+  }
+  if(_currentCharacter==1) {
+    _pBeing->setForwardDirection( );
+    _pBeing->setPosition( newPosition );
+  }
 }
 
 void MPEngine::run( )

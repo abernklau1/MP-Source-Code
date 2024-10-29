@@ -74,7 +74,7 @@ class Tav
     glm::vec3 _tavStaffTipColor;
 
     GLfloat _rotationX;
-    GLfloat _rotationY;
+    GLfloat _rotationY = 0;
 
     glm::vec3 _forwardDirection;
 

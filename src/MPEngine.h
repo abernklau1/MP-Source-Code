@@ -8,6 +8,8 @@
 
 #include "ArcBall.hpp"
 #include "Tav.h"
+#include "Being.h"
+#include "FreeCam.h"
 #include <vector>
 
 class MPEngine final : public CSCI441::OpenGLEngine
@@ -36,6 +38,7 @@ class MPEngine final : public CSCI441::OpenGLEngine
     static constexpr GLfloat MOUSE_UNINITIALIZED = -9999.0f;
 
   private:
+    FreeCam* _pFreeCam;
     // parameters to make up our grid size and spacing, feel free to
     // play around with this
     const GLfloat GRID_WIDTH          = WORLD_SIZE * 1.8f;
@@ -84,6 +87,9 @@ class MPEngine final : public CSCI441::OpenGLEngine
     glm::vec2 _cameraSpeed;
 
     Tav* _pTav;
+    Being* _pBeing;
+    int _currentCharacter=0;
+
 
     /// \desc the size of the world (controls the ground size and locations of buildings)
     static constexpr GLfloat WORLD_SIZE = 55.0f;
