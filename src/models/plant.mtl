@@ -1,0 +1,10 @@
+# Blender 4.2.3 LTS MTL File: 'None'
+# www.blender.org
+# Green Material
+newmtl Material
+Ka 1.0 1.0 1.0  # Ambient color (green)
+Kd 1.0 1.0 1.0  # Diffuse color (green)
+Ks 1.0 1.0 1.0  # Specular color (black)
+Ns 0            # Specular exponent
+d 1.0           # Dissolve (opacity)
+illum 2         # Illumination model (reflective)

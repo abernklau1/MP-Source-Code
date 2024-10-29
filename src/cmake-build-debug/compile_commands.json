@@ -1,32 +1,32 @@
 [
 {
-  "directory": "C:/Users/bguev/Desktop/ComputerGraphics/Project/src/cmake-build-debug",
-  "command": "C:\\MinGW\\MinGW\\bin\\c++.exe -IZ:/CSCI441/include -g -std=gnu++17 -fdiagnostics-color=always -o CMakeFiles\\a3.dir\\main.cpp.obj -c C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\main.cpp",
-  "file": "C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\main.cpp",
-  "output": "CMakeFiles\\a3.dir\\main.cpp.obj"
+  "directory": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/cmake-build-debug",
+  "command": "C:\\MinGW\\bin\\c++.exe  @CMakeFiles/a3.dir/includes_CXX.rsp -g -fdiagnostics-color=always -std=gnu++17 -o CMakeFiles\\a3.dir\\main.cpp.obj -c C:\\Users\\gumpop\\CLionProjects\\MP-Source-Code\\src\\main.cpp",
+  "file": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/main.cpp"
 },
 {
-  "directory": "C:/Users/bguev/Desktop/ComputerGraphics/Project/src/cmake-build-debug",
-  "command": "C:\\MinGW\\MinGW\\bin\\c++.exe -IZ:/CSCI441/include -g -std=gnu++17 -fdiagnostics-color=always -o CMakeFiles\\a3.dir\\MPEngine.cpp.obj -c C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\MPEngine.cpp",
-  "file": "C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\MPEngine.cpp",
-  "output": "CMakeFiles\\a3.dir\\MPEngine.cpp.obj"
+  "directory": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/cmake-build-debug",
+  "command": "C:\\MinGW\\bin\\c++.exe  @CMakeFiles/a3.dir/includes_CXX.rsp -g -fdiagnostics-color=always -std=gnu++17 -o CMakeFiles\\a3.dir\\MPEngine.cpp.obj -c C:\\Users\\gumpop\\CLionProjects\\MP-Source-Code\\src\\MPEngine.cpp",
+  "file": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/MPEngine.cpp"
 },
 {
-  "directory": "C:/Users/bguev/Desktop/ComputerGraphics/Project/src/cmake-build-debug",
-  "command": "C:\\MinGW\\MinGW\\bin\\c++.exe -IZ:/CSCI441/include -g -std=gnu++17 -fdiagnostics-color=always -o CMakeFiles\\a3.dir\\Tav.cpp.obj -c C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\Tav.cpp",
-  "file": "C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\Tav.cpp",
-  "output": "CMakeFiles\\a3.dir\\Tav.cpp.obj"
+  "directory": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/cmake-build-debug",
+  "command": "C:\\MinGW\\bin\\c++.exe  @CMakeFiles/a3.dir/includes_CXX.rsp -g -fdiagnostics-color=always -std=gnu++17 -o CMakeFiles\\a3.dir\\Tav.cpp.obj -c C:\\Users\\gumpop\\CLionProjects\\MP-Source-Code\\src\\Tav.cpp",
+  "file": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/Tav.cpp"
 },
 {
-  "directory": "C:/Users/bguev/Desktop/ComputerGraphics/Project/src/cmake-build-debug",
-  "command": "C:\\MinGW\\MinGW\\bin\\c++.exe -IZ:/CSCI441/include -g -std=gnu++17 -fdiagnostics-color=always -o CMakeFiles\\a3.dir\\Being.cpp.obj -c C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\Being.cpp",
-  "file": "C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\Being.cpp",
-  "output": "CMakeFiles\\a3.dir\\Being.cpp.obj"
+  "directory": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/cmake-build-debug",
+  "command": "C:\\MinGW\\bin\\c++.exe  @CMakeFiles/a3.dir/includes_CXX.rsp -g -fdiagnostics-color=always -std=gnu++17 -o CMakeFiles\\a3.dir\\Being.cpp.obj -c C:\\Users\\gumpop\\CLionProjects\\MP-Source-Code\\src\\Being.cpp",
+  "file": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/Being.cpp"
 },
 {
-  "directory": "C:/Users/bguev/Desktop/ComputerGraphics/Project/src/cmake-build-debug",
-  "command": "C:\\MinGW\\MinGW\\bin\\c++.exe -IZ:/CSCI441/include -g -std=gnu++17 -fdiagnostics-color=always -o CMakeFiles\\a3.dir\\FreeCam.cpp.obj -c C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\FreeCam.cpp",
-  "file": "C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\FreeCam.cpp",
-  "output": "CMakeFiles\\a3.dir\\FreeCam.cpp.obj"
+  "directory": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/cmake-build-debug",
+  "command": "C:\\MinGW\\bin\\c++.exe  @CMakeFiles/a3.dir/includes_CXX.rsp -g -fdiagnostics-color=always -std=gnu++17 -o CMakeFiles\\a3.dir\\FreeCam.cpp.obj -c C:\\Users\\gumpop\\CLionProjects\\MP-Source-Code\\src\\FreeCam.cpp",
+  "file": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/FreeCam.cpp"
+},
+{
+  "directory": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/cmake-build-debug",
+  "command": "C:\\MinGW\\bin\\c++.exe  @CMakeFiles/a3.dir/includes_CXX.rsp -g -fdiagnostics-color=always -std=gnu++17 -o CMakeFiles\\a3.dir\\horse.cpp.obj -c C:\\Users\\gumpop\\CLionProjects\\MP-Source-Code\\src\\horse.cpp",
+  "file": "C:/Users/gumpop/CLionProjects/MP-Source-Code/src/horse.cpp"
 }
 ]
