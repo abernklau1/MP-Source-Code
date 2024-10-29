@@ -8,6 +8,7 @@
 
 #include "ArcBall.hpp"
 #include "Tav.h"
+#include "Being.h"
 #include <vector>
 
 class MPEngine final : public CSCI441::OpenGLEngine
@@ -84,6 +85,9 @@ class MPEngine final : public CSCI441::OpenGLEngine
     glm::vec2 _cameraSpeed;
 
     Tav* _pTav;
+    Being* _pBeing;
+    int _currentCharacter=0;
+
 
     /// \desc the size of the world (controls the ground size and locations of buildings)
     static constexpr GLfloat WORLD_SIZE = 55.0f;

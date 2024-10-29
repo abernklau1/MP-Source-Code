@@ -12,7 +12,7 @@
  *
  */
 
-#include "A3Engine.h"
+#include "MPEngine.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -23,7 +23,7 @@
 int main( )
 {
 
-  auto a3Engine = new A3Engine( );
+  auto a3Engine = new MPEngine( );
   a3Engine->initialize( );
   if ( a3Engine->getError( ) == CSCI441::OpenGLEngine::OPENGL_ENGINE_ERROR_NO_ERROR )
   {
