@@ -28,5 +28,11 @@
   "command": "C:\\MinGW\\MinGW\\bin\\c++.exe -IZ:/CSCI441/include -g -std=gnu++17 -fdiagnostics-color=always -o CMakeFiles\\a3.dir\\FreeCam.cpp.obj -c C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\FreeCam.cpp",
   "file": "C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\FreeCam.cpp",
   "output": "CMakeFiles\\a3.dir\\FreeCam.cpp.obj"
+},
+{
+  "directory": "C:/Users/bguev/Desktop/ComputerGraphics/Project/src/cmake-build-debug",
+  "command": "C:\\MinGW\\MinGW\\bin\\c++.exe -IZ:/CSCI441/include -g -std=gnu++17 -fdiagnostics-color=always -o CMakeFiles\\a3.dir\\horse.cpp.obj -c C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\horse.cpp",
+  "file": "C:\\Users\\bguev\\Desktop\\ComputerGraphics\\Project\\src\\horse.cpp",
+  "output": "CMakeFiles\\a3.dir\\horse.cpp.obj"
 }
 ]
