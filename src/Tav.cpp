@@ -25,7 +25,7 @@ Tav::Tav( GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normalM
 
 void Tav::drawTav( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx )
 {
-  modelMtx = glm::rotate( modelMtx, _rotationY, CSCI441::Y_AXIS );
+  modelMtx = glm::rotate( modelMtx, _rotationY, glm::vec3(0.0f, 1.0f, 0.0f) );
   _drawTavBody( modelMtx, viewMtx, projMtx );
   _drawTavHead( modelMtx, viewMtx, projMtx );
   _drawTavEyes( modelMtx, viewMtx, projMtx );
@@ -38,7 +38,7 @@ void Tav::moveForward( GLfloat movementFactor ) { _position += _forwardDirection
 
 void Tav::moveBackward( GLfloat movementFactor ) { _position -= _forwardDirection * movementFactor; }
 
-void Tav::rotate( GLfloat rotationFactor ) { _rotationY += rotationFactor; }
+void Tav::rotate( GLfloat rotationFactor ) { _rotationY += rotationFactor;}
 
 glm::vec3 Tav::getPosition( ) { return _position; }
 void Tav::setPosition( glm::vec3 position ) { _position = position; }

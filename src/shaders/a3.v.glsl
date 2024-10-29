@@ -42,7 +42,7 @@ void main() {
     vec3 specular = lightColor * specularFactor;
 
     // Perform ambient calculation
-    vec3 ambient = diffuseFactor * lightColor;
+    vec3 ambient = 0.3 * lightColor;
 
     // TODO #G: assign the color for this vertex
     color = (ambient + specular + diffuse) * materialColor;

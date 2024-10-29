@@ -3,7 +3,7 @@
 
 #include <CSCI441/PerspectiveCamera.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtx/string_cast.hpp>
+//#include <glm/gtx/string_cast.hpp>
 #include <iostream>
 
 class ArcBall final : public CSCI441::PerspectiveCamera
