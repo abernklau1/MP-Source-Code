@@ -22,7 +22,7 @@ GLfloat getRand( ) { return (GLfloat)rand( ) / (GLfloat)RAND_MAX; }
 MPEngine::MPEngine( )
     : CSCI441::OpenGLEngine( 4, 1, 640, 480, "MP: Tav" )
 {
-  _pFreeCam = new FreeCam();
+  _pFreeCam = new FreeCam( );
   for ( auto& _key : _keys )
     _key = GL_FALSE;
 
@@ -43,57 +43,73 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
   if ( key != GLFW_KEY_UNKNOWN )
     _keys[key] = ( ( action == GLFW_PRESS ) || ( action == GLFW_REPEAT ) );
 
-  if ( action == GLFW_PRESS ||  action == GLFW_REPEAT)
+  if ( action == GLFW_PRESS || action == GLFW_REPEAT )
   {
-    if (_keys[GLFW_KEY_Y] && _pActiveCamera==_pFreeCam)
+    if ( _keys[GLFW_KEY_Y] && _pActiveCamera == _pFreeCam )
     {
-      _pFreeCam->moveForward(0.1);
-      _pArcballCam->setCameraPosition(_pFreeCam->getPosition());
+      _pFreeCam->moveForward( 0.1 );
+      _pArcballCam->setCameraPosition( _pFreeCam->getPosition( ) );
     }
-    if (_keys[GLFW_KEY_H] && _pActiveCamera==_pFreeCam)
+    if ( _keys[GLFW_KEY_H] && _pActiveCamera == _pFreeCam )
     {
-      _pFreeCam->moveBackward(0.1);
-      _pArcballCam->setCameraPosition(_pFreeCam->getPosition());
+      _pFreeCam->moveBackward( 0.1 );
+      _pArcballCam->setCameraPosition( _pFreeCam->getPosition( ) );
     }
-    if(key==GLFW_KEY_1) {
+    if ( key == GLFW_KEY_1 )
+    {
       _pActiveCamera = _pArcballCam;
-
     }
-    else if(key==GLFW_KEY_2) {
+    else if ( key == GLFW_KEY_2 )
+    {
       glm::vec3 targetPosition;
-      if(_currentCharacter==0) {
-          targetPosition = _pTav->getPosition();
-      } else if(_currentCharacter==1) {
+      if ( _currentCharacter == 0 )
+      {
+        targetPosition = _pTav->getPosition( );
+      }
+      else if ( _currentCharacter == 1 )
+      {
         targetPosition = _pBeing->getPosition( );
-      } else if(_currentCharacter == 2){
-          targetPosition = _pHorse->getHorsePos();
+      }
+      else if ( _currentCharacter == 2 )
+      {
+        targetPosition = _pHorse->getHorsePos( );
       }
 
-      _pFreeCam->setPosition(_pArcballCam->getPosition());
+      _pFreeCam->setPosition( _pArcballCam->getPosition( ) );
 
-      _pFreeCam->setPosition(_pArcballCam->getPosition());
+      _pFreeCam->setPosition( _pArcballCam->getPosition( ) );
 
       // Compute the direction vector for FreeCam
-      glm::vec3 freeCamDirection = glm::normalize(targetPosition - _pFreeCam->getPosition());
+      glm::vec3 freeCamDirection = glm::normalize( targetPosition - _pFreeCam->getPosition( ) );
 
       // Compute Theta and Phi based on FreeCam's definitions
-      GLfloat phi = acos(freeCamDirection.y);
-      GLfloat theta = atan2(freeCamDirection.z, freeCamDirection.x);
+      GLfloat phi   = acos( freeCamDirection.y );
+      GLfloat theta = atan2( freeCamDirection.z, freeCamDirection.x );
 
-      _pFreeCam->setTheta(theta);
-      _pFreeCam->setPhi(phi);
-      _pFreeCam->recomputeOrientation();
+      _pFreeCam->setTheta( theta );
+      _pFreeCam->setPhi( phi );
+      _pFreeCam->recomputeOrientation( );
       _pActiveCamera = _pFreeCam;
     }
-    if(key == GLFW_KEY_3) {
+    if ( key == GLFW_KEY_3 )
+    {
       _toggleFirst = !_toggleFirst;
     }
     switch ( key )
     {
       // Toggle cameras
-      case GLFW_KEY_T: _currentCharacter=0; _angle=_pTav->_rotationY; break;
-      case GLFW_KEY_B: _currentCharacter=1; _angle =_pBeing->toRotate; break;
-      case GLFW_KEY_R: _currentCharacter=2; _angle = _pHorse->_horseAngle; break;
+      case GLFW_KEY_T:
+        _currentCharacter = 0;
+        _angle            = _pTav->_rotationY;
+        break;
+      case GLFW_KEY_B:
+        _currentCharacter = 1;
+        _angle            = _pBeing->toRotate;
+        break;
+      case GLFW_KEY_R:
+        _currentCharacter = 2;
+        _angle            = _pHorse->_horseAngle;
+        break;
       // quit!
       case GLFW_KEY_Q:
       case GLFW_KEY_ESCAPE: setWindowShouldClose( ); break;
@@ -133,7 +149,8 @@ void MPEngine::handleCursorPositionEvent( glm::vec2 currMousePosition )
     if ( _keys[GLFW_KEY_LEFT_SHIFT] || _keys[GLFW_KEY_RIGHT_SHIFT] )
     {
       // Zoom based on vertical mouse movement
-      if(_pActiveCamera==_pArcballCam) {
+      if ( _pActiveCamera == _pArcballCam )
+      {
         float zoomAmount = ( currMousePosition.y - _mousePosition.y ) * 0.01f;
         _pArcballCam->zoom( zoomAmount );
       }
@@ -141,9 +158,12 @@ void MPEngine::handleCursorPositionEvent( glm::vec2 currMousePosition )
     else
     {
       // rotate the camera by the distance the mouse moved
-      if(_pActiveCamera==_pArcballCam) {
+      if ( _pActiveCamera == _pArcballCam )
+      {
         _pArcballCam->rotate( ( currMousePosition.x - _mousePosition.x ) * 0.005f, ( _mousePosition.y - currMousePosition.y ) * 0.005f );
-      } else {
+      }
+      else
+      {
         _pFreeCam->rotate( ( currMousePosition.x - _mousePosition.x ) * 0.005f, ( _mousePosition.y - currMousePosition.y ) * 0.005f );
       }
     }
@@ -193,9 +213,7 @@ void MPEngine::mSetupShaders( )
   _lightingShaderAttributeLocations.vNormal = _lightingShaderProgram->getAttributeLocation( "vNormal" );
 }
 
-void MPEngine::mSetupTextures() {
-    _skyTex = _loadAndRegisterTexture("textures/cubeMapFrozen.png ");
-}
+void MPEngine::mSetupTextures( ) { _skyTex = _loadAndRegisterTexture( "textures/cubeMapFrozen.png " ); }
 
 void MPEngine::mSetupBuffers( )
 {
@@ -207,35 +225,47 @@ void MPEngine::mSetupBuffers( )
       new Tav( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor );
   _pBeing =
       new Being( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor );
-  _pHorse = new horse( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor, GRID_WIDTH + 5.0f);
+  _pHorse = new horse( _lightingShaderProgram->getShaderProgramHandle( ),
+                       _lightingShaderUniformLocations.mvpMatrix,
+                       _lightingShaderUniformLocations.nMatrix,
+                       _lightingShaderUniformLocations.materialColor,
+                       GRID_WIDTH + 5.0f );
 
-
-  _pObjModel = new CSCI441::ModelLoader();
-  _pObjModel->enableAutoGenerateNormals();
-  if( _pObjModel->loadModelFile("models/plant.obj" ) ) {
-      _pObjModel->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
-  } else {
-      fprintf(stderr, "[ERROR]: Could not open OBJ Model\n");
-      delete _pObjModel;
-      _pObjModel = nullptr;
+  _pObjModel = new CSCI441::ModelLoader( );
+  _pObjModel->enableAutoGenerateNormals( );
+  if ( _pObjModel->loadModelFile( "models/plant.obj" ) )
+  {
+    _pObjModel->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
+  }
+  else
+  {
+    fprintf( stderr, "[ERROR]: Could not open OBJ Model\n" );
+    delete _pObjModel;
+    _pObjModel = nullptr;
   }
 
-  _pObjModelB = new CSCI441::ModelLoader();
-  _pObjModelB->enableAutoGenerateNormals();
-  if( _pObjModelB->loadModelFile("models/bunny.obj" ) ) {
-      _pObjModelB->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
-  } else {
-      fprintf(stderr, "[ERROR]: Could not open OBJ Model\n");
-      delete _pObjModelB;
-      _pObjModelB = nullptr;
+  _pObjModelB = new CSCI441::ModelLoader( );
+  _pObjModelB->enableAutoGenerateNormals( );
+  if ( _pObjModelB->loadModelFile( "models/bunny.obj" ) )
+  {
+    _pObjModelB->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
   }
-  _pObjModelC = new CSCI441::ModelLoader();
-  if( _pObjModelC->loadModelFile("models/cottage.obj" ) ) {
-      _pObjModelC->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
-  } else {
-      fprintf(stderr, "[ERROR]: Could not open OBJ Model\n");
-      delete _pObjModelB;
-      _pObjModelC = nullptr;
+  else
+  {
+    fprintf( stderr, "[ERROR]: Could not open OBJ Model\n" );
+    delete _pObjModelB;
+    _pObjModelB = nullptr;
+  }
+  _pObjModelC = new CSCI441::ModelLoader( );
+  if ( _pObjModelC->loadModelFile( "models/cottage.obj" ) )
+  {
+    _pObjModelC->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
+  }
+  else
+  {
+    fprintf( stderr, "[ERROR]: Could not open OBJ Model\n" );
+    delete _pObjModelB;
+    _pObjModelC = nullptr;
   }
   _createGroundBuffers( );
   _generateEnvironment( );
@@ -288,7 +318,7 @@ void MPEngine::_createGroundBuffers( )
 void MPEngine::_generateEnvironment( )
 {
   //******************************************************************
-    //cottage time
+  // cottage time
   //******************************************************************
 
   srand( time( 0 ) ); // seed our RNG
@@ -300,56 +330,58 @@ void MPEngine::_generateEnvironment( )
     {
       if ( i % 2 && j % 2 && getRand( ) < 0.05f )
       {
-          float r = getRand();
-        if(r<0.4f){
-            glm::mat4 transToSpotMtx = glm::translate( glm::mat4( 1.0 ), glm::vec3( i, 0.0f, j ) );
+        float r = getRand( );
+        if ( r < 0.4f )
+        {
+          glm::mat4 transToSpotMtx = glm::translate( glm::mat4( 1.0 ), glm::vec3( i, 0.0f, j ) );
 
-            // Calculate a uniform scale factor with reduced range
-            GLdouble scaleFactor = std::max( 1.0, pow( getRand( ), 2.0 ) * 5 ) * 1.2;
+          // Calculate a uniform scale factor with reduced range
+          GLdouble scaleFactor = std::max( 1.0, pow( getRand( ), 2.0 ) * 5 ) * 1.2;
 
-            // Apply uniform scaling to all dimensions
-            glm::mat4 scaleToHeightMtx = glm::scale( glm::mat4( 1.0 ), glm::vec3( scaleFactor, scaleFactor, scaleFactor ) );
+          // Apply uniform scaling to all dimensions
+          glm::mat4 scaleToHeightMtx = glm::scale( glm::mat4( 1.0 ), glm::vec3( scaleFactor, scaleFactor, scaleFactor ) );
 
-            // Translate the tree to the ground level based on its height
-            glm::mat4 transToHeight = glm::translate( glm::mat4( 1.0 ), glm::vec3( 0, 0, 0 ) );
+          // Translate the tree to the ground level based on its height
+          glm::mat4 transToHeight = glm::translate( glm::mat4( 1.0 ), glm::vec3( 0, 0, 0 ) );
 
-            glm::mat4 modelMatrix = transToSpotMtx * transToHeight * scaleToHeightMtx;
+          glm::mat4 modelMatrix = transToSpotMtx * transToHeight * scaleToHeightMtx;
 
-            TreeData currentTreeSet   = { modelMatrix };
-            currentTreeSet.isTwoTrees = getRand( ) < 0.5f;
-            _trees.emplace_back( currentTreeSet );
-        } else if(r<0.8){ //do it for plants
-            // translate to spot
-            glm::mat4 transToSpotMtxPlant = glm::translate( glm::mat4(1.0), glm::vec3(i, 0.0f, j) );
-
-            // translate up to grid
-            glm::mat4 transToHeightPlant = glm::translate( glm::mat4(1.0), glm::vec3(0, -0.5 - getRand(), 0) );
-
-            // compute full model matrix
-            glm::mat4 modelMatrixPlant = transToHeightPlant * transToSpotMtxPlant;
-
-            // store building properties
-            PlantData currentPlant = {modelMatrixPlant};
-            _plants.emplace_back(currentPlant );
-        } else {
-            //randomly rotate pur bunny
-            glm::mat4 rotateBunny = glm::rotate(glm::mat4(1.0), getRand(), CSCI441::Y_AXIS );
-            // translate to spot
-            glm::mat4 transToSpotMtxBunny = glm::translate( glm::mat4(1.0), glm::vec3(i, 0.0f, j) );
-
-            // translate up to grid
-            glm::mat4 transToHeightBunny = glm::translate( glm::mat4(1.0), glm::vec3(0, 1, 0) );
-            glm::mat4 scaleToHeightMtx = glm::scale( glm::mat4( 1.0 ), glm::vec3( 0.75, 0.75, 0.75 ) );
-            // compute full model matrix
-            glm::mat4 modelMatrixBunny = rotateBunny * transToHeightBunny * transToSpotMtxBunny * scaleToHeightMtx;
-
-            // store building properties
-            BunnyData currentBunny = {modelMatrixBunny};
-            _bunnies.emplace_back(currentBunny);
+          TreeData currentTreeSet   = { modelMatrix };
+          currentTreeSet.isTwoTrees = getRand( ) < 0.5f;
+          _trees.emplace_back( currentTreeSet );
         }
+        else if ( r < 0.8 )
+        { // do it for plants
+          // translate to spot
+          glm::mat4 transToSpotMtxPlant = glm::translate( glm::mat4( 1.0 ), glm::vec3( i, 0.0f, j ) );
 
+          // translate up to grid
+          glm::mat4 transToHeightPlant = glm::translate( glm::mat4( 1.0 ), glm::vec3( 0, -0.5 - getRand( ), 0 ) );
 
+          // compute full model matrix
+          glm::mat4 modelMatrixPlant = transToHeightPlant * transToSpotMtxPlant;
 
+          // store building properties
+          PlantData currentPlant = { modelMatrixPlant };
+          _plants.emplace_back( currentPlant );
+        }
+        else
+        {
+          // randomly rotate pur bunny
+          glm::mat4 rotateBunny = glm::rotate( glm::mat4( 1.0 ), getRand( ), CSCI441::Y_AXIS );
+          // translate to spot
+          glm::mat4 transToSpotMtxBunny = glm::translate( glm::mat4( 1.0 ), glm::vec3( i, 0.0f, j ) );
+
+          // translate up to grid
+          glm::mat4 transToHeightBunny = glm::translate( glm::mat4( 1.0 ), glm::vec3( 0, 1, 0 ) );
+          glm::mat4 scaleToHeightMtx   = glm::scale( glm::mat4( 1.0 ), glm::vec3( 0.75, 0.75, 0.75 ) );
+          // compute full model matrix
+          glm::mat4 modelMatrixBunny = rotateBunny * transToHeightBunny * transToSpotMtxBunny * scaleToHeightMtx;
+
+          // store building properties
+          BunnyData currentBunny = { modelMatrixBunny };
+          _bunnies.emplace_back( currentBunny );
+        }
       }
     }
   }
@@ -357,17 +389,22 @@ void MPEngine::_generateEnvironment( )
 
 void MPEngine::mSetupScene( )
 {
-  _pArcballCam             = new ArcBall( );
-  _pFreeCam = new FreeCam();
-  _pFirstPersonCam = new FirstPerson();
+  _pArcballCam     = new ArcBall( );
+  _pFreeCam        = new FreeCam( );
+  _pFirstPersonCam = new FirstPerson( );
   glm::vec3 targetPosition;
-  if(_currentCharacter==0) {
+  if ( _currentCharacter == 0 )
+  {
     targetPosition = _pTav->getPosition( );
-  } else if(_currentCharacter==1) {
+  }
+  else if ( _currentCharacter == 1 )
+  {
     targetPosition = _pBeing->getPosition( );
-  } else if (_currentCharacter == 2){
-      targetPosition = _pHorse->getHorsePos();
-      //std::cout<<"tX: "<<targetPosition.x<<"tY: "<<targetPosition.y<<"tZ: "<<targetPosition.z;
+  }
+  else if ( _currentCharacter == 2 )
+  {
+    targetPosition = _pHorse->getHorsePos( );
+    // std::cout<<"tX: "<<targetPosition.x<<"tY: "<<targetPosition.y<<"tZ: "<<targetPosition.z;
   }
 
   // Define an offset vector for the camera
@@ -385,21 +422,20 @@ void MPEngine::mSetupScene( )
   _pArcballCam->setPhi( acos( arcballDirection.y ) );
   _pArcballCam->recomputeOrientation( );
 
+  _pFreeCam->setPosition( _pArcballCam->getPosition( ) );
 
-  _pFreeCam->setPosition(_pArcballCam->getPosition());
+  _pFreeCam->setPosition( _pArcballCam->getPosition( ) );
 
-    _pFreeCam->setPosition(_pArcballCam->getPosition());
+  // Compute the direction vector for FreeCam
+  glm::vec3 freeCamDirection = glm::normalize( targetPosition - _pFreeCam->getPosition( ) );
 
-    // Compute the direction vector for FreeCam
-    glm::vec3 freeCamDirection = glm::normalize(targetPosition - _pFreeCam->getPosition());
+  // Compute Theta and Phi based on FreeCam's definitions
+  GLfloat phi   = acos( freeCamDirection.y );
+  GLfloat theta = atan2( freeCamDirection.z, freeCamDirection.x );
 
-    // Compute Theta and Phi based on FreeCam's definitions
-    GLfloat phi = acos(freeCamDirection.y);
-    GLfloat theta = atan2(freeCamDirection.z, freeCamDirection.x);
-
-    _pFreeCam->setTheta(theta);
-    _pFreeCam->setPhi(phi);
-    _pFreeCam->recomputeOrientation();
+  _pFreeCam->setTheta( theta );
+  _pFreeCam->setPhi( phi );
+  _pFreeCam->recomputeOrientation( );
 
   _pActiveCamera = _pArcballCam;
   _cameraSpeed   = glm::vec2( 0.25f, 0.02f );
@@ -436,11 +472,11 @@ void MPEngine::mCleanupBuffers( )
   delete _pTav;
 }
 
-void MPEngine::mCleanupTextures() {
-    fprintf( stdout, "[INFO]: ...deleting textures\n" );
-    // TODO #23 - delete textures
-    glDeleteTextures(1, reinterpret_cast<const GLuint *>(&_skyTex));
-
+void MPEngine::mCleanupTextures( )
+{
+  fprintf( stdout, "[INFO]: ...deleting textures\n" );
+  // TODO #23 - delete textures
+  glDeleteTextures( 1, reinterpret_cast<const GLuint*>( &_skyTex ) );
 }
 
 //*************************************************************************************
@@ -464,6 +500,9 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   glBindVertexArray( _groundVAO );
   glDrawElements( GL_TRIANGLE_STRIP, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0 );
   //// END DRAWING THE GROUND PLANE ////
+  //// SKYBOXXXXXXX TIME!!!! /////
+  glBindTexture( GL_TEXTURE_2D, _skyTex );
+  CSCI441::drawCubeMap( WORLD_SIZE * 3 );
 
   //// END SKYBOX /////
   //// BEGIN DRAWING THE BUILDINGS ////
@@ -480,47 +519,55 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
       _drawTwoTrees( currentTree, viewMtx, projMtx );
     }
   }
-  for( const PlantData& currentPlant : _plants ) {
-      _computeAndSendMatrixUniforms(currentPlant.modelMatrix, viewMtx, projMtx);
+  for ( const PlantData& currentPlant : _plants )
+  {
+    _computeAndSendMatrixUniforms( currentPlant.modelMatrix, viewMtx, projMtx );
 
-      _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.materialColor, currentPlant.color);
+    _lightingShaderProgram->setProgramUniform( _lightingShaderUniformLocations.materialColor, currentPlant.color );
 
-      if(_pObjModel != nullptr) {
-          if( !_pObjModel->draw(_lightingShaderProgram->getShaderProgramHandle() ) ) {
-              fprintf(stderr, "[ERROR]: Could not draw OBJ Model\n");
-              glfwSetWindowShouldClose(mpWindow, GLFW_TRUE);
-          }
+    if ( _pObjModel != nullptr )
+    {
+      if ( !_pObjModel->draw( _lightingShaderProgram->getShaderProgramHandle( ) ) )
+      {
+        fprintf( stderr, "[ERROR]: Could not draw OBJ Model\n" );
+        glfwSetWindowShouldClose( mpWindow, GLFW_TRUE );
       }
     }
-    for( const BunnyData& currentBunny : _bunnies ) {
-        _computeAndSendMatrixUniforms(currentBunny.modelMatrix, viewMtx, projMtx);
+  }
+  for ( const BunnyData& currentBunny : _bunnies )
+  {
+    _computeAndSendMatrixUniforms( currentBunny.modelMatrix, viewMtx, projMtx );
 
-        _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.materialColor, currentBunny.color);
+    _lightingShaderProgram->setProgramUniform( _lightingShaderUniformLocations.materialColor, currentBunny.color );
 
-        if(_pObjModelB != nullptr) {
-            if( !_pObjModelB->draw(_lightingShaderProgram->getShaderProgramHandle() ) ) {
-                fprintf(stderr, "[ERROR]: Could not draw OBJ Model\n");
-                glfwSetWindowShouldClose(mpWindow, GLFW_TRUE);
-            }
-        }
+    if ( _pObjModelB != nullptr )
+    {
+      if ( !_pObjModelB->draw( _lightingShaderProgram->getShaderProgramHandle( ) ) )
+      {
+        fprintf( stderr, "[ERROR]: Could not draw OBJ Model\n" );
+        glfwSetWindowShouldClose( mpWindow, GLFW_TRUE );
+      }
     }
-    //draw the cottage for extra spice
-    // translate to spot
-    glm::mat4 transToSpotMtx = glm::translate( glm::mat4(1.0), glm::vec3(-25, 0.0f, -25) );
+  }
+  // draw the cottage for extra spice
+  //  translate to spot
+  glm::mat4 transToSpotMtx = glm::translate( glm::mat4( 1.0 ), glm::vec3( -25, 0.0f, -25 ) );
 
-    // compute full model matrix
-    glm::mat4 modelMatrix = transToSpotMtx ;
+  // compute full model matrix
+  glm::mat4 modelMatrix = transToSpotMtx;
 
-    _computeAndSendMatrixUniforms(modelMatrix, viewMtx, projMtx);
+  _computeAndSendMatrixUniforms( modelMatrix, viewMtx, projMtx );
 
-    _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.materialColor, glm::vec3(0.45,0.3065,0.0585));
+  _lightingShaderProgram->setProgramUniform( _lightingShaderUniformLocations.materialColor, glm::vec3( 0.45, 0.3065, 0.0585 ) );
 
-    if(_pObjModelC != nullptr) {
-        if( !_pObjModelC->draw(_lightingShaderProgram->getShaderProgramHandle() ) ) {
-            fprintf(stderr, "[ERROR]: Could not draw OBJ Model\n");
-            glfwSetWindowShouldClose(mpWindow, GLFW_TRUE);
-        }
+  if ( _pObjModelC != nullptr )
+  {
+    if ( !_pObjModelC->draw( _lightingShaderProgram->getShaderProgramHandle( ) ) )
+    {
+      fprintf( stderr, "[ERROR]: Could not draw OBJ Model\n" );
+      glfwSetWindowShouldClose( mpWindow, GLFW_TRUE );
     }
+  }
 
   //// END DRAWING THE BUILDINGS ////
 
@@ -534,10 +581,10 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   // draw our Tav now
   _pTav->drawTav( modelMtx1, viewMtx, projMtx );
   glm::mat4 modelMtx2( 1.0f );
-  modelMtx2 = glm::translate( modelMtx2, _pBeing->getPosition() );
+  modelMtx2 = glm::translate( modelMtx2, _pBeing->getPosition( ) );
   _pBeing->drawPerson( modelMtx2, viewMtx, projMtx );
   glm::mat4 modelMtx3( 1.0f );
-  //modelMtx3 = glm::translate( modelMtx2, _pHorse->getHorsePos() );
+  // modelMtx3 = glm::translate( modelMtx2, _pHorse->getHorsePos() );
   _pHorse->drawHorse( modelMtx3, viewMtx, projMtx );
 
   //// END DRAWING TAV ////
@@ -552,18 +599,21 @@ void MPEngine::_updateScene( )
   const GLfloat maxZ = TOP_END_POINT;
 
   _pTav->update( );
-  _pBeing->moveNose();
+  _pBeing->moveNose( );
 
   // Get the current position of the character
   glm::vec3 currentPosition;
-  if(_currentCharacter==0) {
+  if ( _currentCharacter == 0 )
+  {
     currentPosition = _pTav->getPosition( );
   }
-  if(_currentCharacter==1) {
+  if ( _currentCharacter == 1 )
+  {
     currentPosition = _pBeing->getPosition( );
   }
-  if(_currentCharacter==2) {
-      currentPosition = _pHorse->getHorsePos();
+  if ( _currentCharacter == 2 )
+  {
+    currentPosition = _pHorse->getHorsePos( );
   }
 
   // Calculate the new position based on input
@@ -571,48 +621,63 @@ void MPEngine::_updateScene( )
 
   if ( _keys[GLFW_KEY_W] || _keys[GLFW_KEY_UP] )
   {
-    if(_currentCharacter==0) {
+    if ( _currentCharacter == 0 )
+    {
       newPosition += _pTav->getForwardDirection( ) * _pTav->tavSpeed;
     }
-    if(_currentCharacter==1) {
+    if ( _currentCharacter == 1 )
+    {
       newPosition += _pBeing->getForwardDirection( ) * _pTav->tavSpeed;
     }
-    if(_currentCharacter==2){
-        _pHorse->moveForward();
+    if ( _currentCharacter == 2 )
+    {
+      _pHorse->moveForward( );
     }
   }
   if ( _keys[GLFW_KEY_S] || _keys[GLFW_KEY_DOWN] )
   {
-    if(_currentCharacter==0) {
+    if ( _currentCharacter == 0 )
+    {
       newPosition -= _pTav->getForwardDirection( ) * _pTav->tavSpeed;
     }
-    if(_currentCharacter==1) {
-      newPosition -= _pBeing->getForwardDirection()* _pTav->tavSpeed;
+    if ( _currentCharacter == 1 )
+    {
+      newPosition -= _pBeing->getForwardDirection( ) * _pTav->tavSpeed;
     }
-    if(_currentCharacter == 2){
-        _pHorse->moveBackward();
+    if ( _currentCharacter == 2 )
+    {
+      _pHorse->moveBackward( );
     }
   }
   if ( _keys[GLFW_KEY_D] || _keys[GLFW_KEY_RIGHT] )
   {
-    if(_currentCharacter==0) {
+    if ( _currentCharacter == 0 )
+    {
       _pTav->rotate( -_pTav->tavRotationSpeed );
     }
-    if(_currentCharacter==1) {
-      _pBeing->rotateSelf(-_pTav->tavRotationSpeed);
-    } else if (_currentCharacter==2){
-        _pHorse->turnLeft();
+    if ( _currentCharacter == 1 )
+    {
+      _pBeing->rotateSelf( -_pTav->tavRotationSpeed );
+    }
+    else if ( _currentCharacter == 2 )
+    {
+      _pHorse->turnLeft( );
     }
     _angle -= _pTav->tavRotationSpeed;
   }
   if ( _keys[GLFW_KEY_A] || _keys[GLFW_KEY_LEFT] )
   {
-    if(_currentCharacter==0) {
+    if ( _currentCharacter == 0 )
+    {
       _pTav->rotate( _pTav->tavRotationSpeed );
-    } else if(_currentCharacter==1) {
-      _pBeing->rotateSelf(_pTav->tavRotationSpeed);
-    } else if (_currentCharacter==2){
-        _pHorse->turnRight();
+    }
+    else if ( _currentCharacter == 1 )
+    {
+      _pBeing->rotateSelf( _pTav->tavRotationSpeed );
+    }
+    else if ( _currentCharacter == 2 )
+    {
+      _pHorse->turnRight( );
     }
     _angle += _pTav->tavRotationSpeed;
   }
@@ -620,47 +685,51 @@ void MPEngine::_updateScene( )
   // Calculate the direction of movement
   glm::vec3 direction;
   glm::vec3 position;
-  if(_currentCharacter==0) {
-    position = _pTav->getPosition( );
+  if ( _currentCharacter == 0 )
+  {
+    position  = _pTav->getPosition( );
     direction = position - _pArcballCam->getLookAtPoint( );
-  } else if(_currentCharacter==1) {
-    position = _pBeing->getPosition( );
+  }
+  else if ( _currentCharacter == 1 )
+  {
+    position  = _pBeing->getPosition( );
     direction = _pBeing->getPosition( ) - _pArcballCam->getLookAtPoint( );
-  } else if(_currentCharacter==2) {
-      position = _pHorse->getHorsePos( );
-      direction = position - _pArcballCam->getLookAtPoint( );
+  }
+  else if ( _currentCharacter == 2 )
+  {
+    position  = _pHorse->getHorsePos( );
+    direction = position - _pArcballCam->getLookAtPoint( );
   }
 
   // Update the camera's position by adding the direction to the current position
   _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
 
-
-
-    _pFirstPersonCam->setTheta( -_angle );
+  _pFirstPersonCam->setTheta( -_angle );
 
   _pFirstPersonCam->setPhi( 0 );
-  _pFirstPersonCam->setCameraDirection(direction);
-  if(_currentCharacter==2) {
-    _pFirstPersonCam->setCameraPosition(position+glm::vec3(0.1f,4.0f,0.0f));
-  }else {
-    _pFirstPersonCam->setCameraPosition(position+glm::vec3(0.0f,1.0f,0.0f));
+  _pFirstPersonCam->setCameraDirection( direction );
+  if ( _currentCharacter == 2 )
+  {
+    _pFirstPersonCam->setCameraPosition( position + glm::vec3( 0.1f, 4.0f, 0.0f ) );
+  }
+  else
+  {
+    _pFirstPersonCam->setCameraPosition( position + glm::vec3( 0.0f, 1.0f, 0.0f ) );
   }
 
   //_pFirstPersonCam->updatePosition( position, direction );
-  _pFirstPersonCam->recomputeOrientation();
+  _pFirstPersonCam->recomputeOrientation( );
 
   // Update the camera's look-at point to be the player's position
   _pArcballCam->setCameraLookAtPoint( position );
 
-
-
-
-
-  if(_currentCharacter==0) {
+  if ( _currentCharacter == 0 )
+  {
     _pTav->setForwardDirection( );
     _pTav->setPosition( newPosition );
   }
-  if(_currentCharacter==1) {
+  if ( _currentCharacter == 1 )
+  {
     _pBeing->setForwardDirection( );
     _pBeing->setPosition( newPosition );
   }
@@ -688,11 +757,12 @@ void MPEngine::run( )
     // draw everything to the window
     _renderScene( _pActiveCamera->getViewMatrix( ), _pActiveCamera->getProjectionMatrix( ) );
 
-    if(_toggleFirst) {
-      printf("first person toggled\n");
-      glViewport(0, 0, 200, 200);
-      glClear(GL_DEPTH_BUFFER_BIT);
-      _renderScene(_pFirstPersonCam->getViewMatrix(), _pFirstPersonCam->getProjectionMatrix( ) );
+    if ( _toggleFirst )
+    {
+      printf( "first person toggled\n" );
+      glViewport( 0, 0, 200, 200 );
+      glClear( GL_DEPTH_BUFFER_BIT );
+      _renderScene( _pFirstPersonCam->getViewMatrix( ), _pFirstPersonCam->getProjectionMatrix( ) );
     }
 
     _updateScene( );
@@ -701,51 +771,57 @@ void MPEngine::run( )
     glfwPollEvents( );           // check for any events and signal to redraw screen
   }
 }
-//for our beautiful textures
-GLuint MPEngine::_loadAndRegisterTexture(const char* FILENAME) {
-    // our handle to the GPU
-    GLuint textureHandle = 0;
 
-    // enable setting to prevent image from being upside down
-    stbi_set_flip_vertically_on_load(true);
+// for our beautiful textures
+GLuint MPEngine::_loadAndRegisterTexture( const char* FILENAME )
+{
+  // our handle to the GPU
+  GLuint textureHandle = 0;
 
-    // will hold image parameters after load
-    GLint imageWidth, imageHeight, imageChannels;
-    // load image from file
-    GLubyte* data = stbi_load( FILENAME, &imageWidth, &imageHeight, &imageChannels, 0);
+  // enable setting to prevent image from being upside down
+  stbi_set_flip_vertically_on_load( true );
 
-    // if data was read from file
-    if( data ) {
-        const GLint STORAGE_TYPE = (imageChannels == 4 ? GL_RGBA : GL_RGB);
+  // will hold image parameters after load
+  GLint imageWidth, imageHeight, imageChannels;
+  // load image from file
+  GLubyte* data = stbi_load( FILENAME, &imageWidth, &imageHeight, &imageChannels, 0 );
 
-        // TODO #01 - generate a texture handle
-        glGenTextures(1 ,&textureHandle);
-        // TODO #02 - bind it to be active
-        glBindTexture(GL_TEXTURE_2D, textureHandle);
-        // set texture parameters
-        // TODO #03 - mag filter
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // TODO #04 - min filter
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        // TODO #05 - wrap s
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        // TODO #06 - wrap t
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // TODO #07 - transfer image data to the GPU
-        glTexImage2D(GL_TEXTURE_2D, 0, STORAGE_TYPE, imageWidth, imageHeight, 0, STORAGE_TYPE, GL_UNSIGNED_BYTE, data);
+  // if data was read from file
+  if ( data )
+  {
+    const GLint STORAGE_TYPE = ( imageChannels == 4 ? GL_RGBA : GL_RGB );
 
-        fprintf( stdout, "[INFO]: %s texture map read in with handle %d\n", FILENAME, textureHandle);
+    // TODO #01 - generate a texture handle
+    glGenTextures( 1, &textureHandle );
+    // TODO #02 - bind it to be active
+    glBindTexture( GL_TEXTURE_2D, textureHandle );
+    // set texture parameters
+    // TODO #03 - mag filter
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    // TODO #04 - min filter
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    // TODO #05 - wrap s
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    // TODO #06 - wrap t
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    // TODO #07 - transfer image data to the GPU
+    glTexImage2D( GL_TEXTURE_2D, 0, STORAGE_TYPE, imageWidth, imageHeight, 0, STORAGE_TYPE, GL_UNSIGNED_BYTE, data );
 
-        // release image memory from CPU - it now lives on the GPU
-        stbi_image_free(data);
-    } else {
-        // load failed
-        fprintf( stderr, "[ERROR]: Could not load texture map \"%s\"\n", FILENAME );
-    }
+    fprintf( stdout, "[INFO]: %s texture map read in with handle %d\n", FILENAME, textureHandle );
 
-    // return generated texture handle
-    return textureHandle;
+    // release image memory from CPU - it now lives on the GPU
+    stbi_image_free( data );
+  }
+  else
+  {
+    // load failed
+    fprintf( stderr, "[ERROR]: Could not load texture map \"%s\"\n", FILENAME );
+  }
+
+  // return generated texture handle
+  return textureHandle;
 }
+
 //*************************************************************************************
 //
 // Private Helper FUnctions
