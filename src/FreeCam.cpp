@@ -1,3 +1,6 @@
+//
+// Created by bguev on 10/29/2024.
+//
 #include "FreeCam.h"
 #include<cmath>
 
@@ -8,7 +11,7 @@ void FreeCam::recomputeOrientation() {
     mCameraDirection.z = sin(mCameraPhi) * sin(mCameraTheta);
 
     mCameraDirection = glm::normalize(mCameraDirection);
-        _updateFreeCameraViewMatrix();
+    _updateFreeCameraViewMatrix();
 }
 
 void FreeCam::moveForward(GLfloat movementFactor) {
