@@ -94,6 +94,7 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
       case GLFW_KEY_T: _currentCharacter=0; break;
       case GLFW_KEY_B: _currentCharacter=1; break;
       case GLFW_KEY_R: _currentCharacter=2; break;
+      case GLFW_KEY_C: _currentCharacter=3; break;
       // quit!
       case GLFW_KEY_Q:
       case GLFW_KEY_ESCAPE: setWindowShouldClose( ); break;

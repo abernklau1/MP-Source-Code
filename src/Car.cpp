@@ -12,8 +12,8 @@ Car::Car( GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normalM
     _shaderProgramUniformLocations.materialColor    = materialColorUniformLocation;
 
     _carPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-    _colorBody = glm::vec3( 0.0f, 0.0f, 1.0f );
-    _colorWheel = glm::vec3( 1.0f, 0.0f, 0.0f );
+    _colorBody = glm::vec3( 1.0f, 0.73f, 0.89f );
+    _colorWheel = glm::vec3( 0.11f, 0.11f, 0.11f );
 
     _carMoveAngle = 0.0f;
     _moveSpeed = 0.01;
@@ -22,7 +22,7 @@ Car::Car( GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normalM
 void Car::drawCar( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx ) {
     modelMtx = glm::translate(modelMtx, _carPosition);
     modelMtx = glm::translate(modelMtx, glm::vec3(0, 0.5, 0));
-    modelMtx = glm::rotate(modelMtx, -_carMoveAngle, CSCI441::X_AXIS );
+    modelMtx = glm::rotate(modelMtx, -_carMoveAngle, CSCI441::Y_AXIS );
     _drawCarBody(modelMtx, viewMtx, projMtx);
 
     _drawCarWheel(glm::rotate(modelMtx * frontLeft, -_PI/2, glm::vec3(0, 0, 1)), viewMtx, projMtx);  //front-left
@@ -64,7 +64,7 @@ void Car::_drawCarBody( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx
 }
 
 void Car::_drawCarWheel(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const {
-    modelMtx = glm::rotate(modelMtx, _rotateWheelAngle, CSCI441::Y_AXIS);
+    modelMtx = glm::rotate(modelMtx, -_rotateWheelAngle, CSCI441::Z_AXIS);
     _computeAndSendMatrixUniforms(modelMtx, viewMtx, projMtx);
     glProgramUniform3fv(_shaderProgramHandle, _shaderProgramUniformLocations.materialColor, 1, glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f))); // Red
     CSCI441::drawSolidCube(0.1);

@@ -1,8 +1,6 @@
-CMakeFiles/a3.dir/main.cpp.o: \
-  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/main.cpp \
-  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/MPEngine.h \
-  /usr/local/include/CSCI441/OpenGLEngine.hpp \
-  /usr/local/include/CSCI441/OpenGLUtils.hpp \
+CMakeFiles/a3.dir/Car.cpp.o: \
+  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/Car.cpp \
+  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/Car.h \
   /usr/local/include/glad/gl.h /usr/local/include/KHR/khrplatform.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/stdint.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__config \
@@ -372,6 +370,113 @@ CMakeFiles/a3.dir/main.cpp.o: \
   /usr/local/include/glm/vector_relational.hpp \
   /usr/local/include/glm/integer.hpp \
   /usr/local/include/glm/detail/func_integer.inl \
+  /usr/local/include/glm/gtc/constants.hpp \
+  /usr/local/include/glm/gtc/../ext/scalar_constants.hpp \
+  /usr/local/include/glm/./ext/scalar_constants.inl \
+  /usr/local/include/glm/gtc/constants.inl \
+  /usr/local/include/glm/gtc/matrix_transform.hpp \
+  /usr/local/include/glm/gtc/../mat4x4.hpp \
+  /usr/local/include/glm/gtc/../vec2.hpp \
+  /usr/local/include/glm/gtc/../vec3.hpp \
+  /usr/local/include/glm/gtc/../vec4.hpp \
+  /usr/local/include/glm/gtc/../ext/matrix_projection.hpp \
+  /usr/local/include/glm/./ext/../gtc/constants.hpp \
+  /usr/local/include/glm/./ext/../geometric.hpp \
+  /usr/local/include/glm/./ext/../trigonometric.hpp \
+  /usr/local/include/glm/./ext/../matrix.hpp \
+  /usr/local/include/glm/./ext/matrix_projection.inl \
+  /usr/local/include/glm/gtc/../ext/matrix_clip_space.hpp \
+  /usr/local/include/glm/./ext/../ext/scalar_constants.hpp \
+  /usr/local/include/glm/./ext/matrix_clip_space.inl \
+  /usr/local/include/glm/gtc/../ext/matrix_transform.hpp \
+  /usr/local/include/glm/./ext/matrix_transform.inl \
+  /usr/local/include/glm/gtc/matrix_transform.inl \
+  /usr/local/include/glm/gtc/../geometric.hpp \
+  /usr/local/include/glm/gtc/../trigonometric.hpp \
+  /usr/local/include/glm/gtc/../matrix.hpp \
+  /usr/local/include/glm/gtc/type_ptr.hpp \
+  /usr/local/include/glm/gtc/../gtc/quaternion.hpp \
+  /usr/local/include/glm/gtc/../gtc/constants.hpp \
+  /usr/local/include/glm/gtc/../gtc/matrix_transform.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_relational.hpp \
+  /usr/local/include/glm/./ext/../detail/qualifier.hpp \
+  /usr/local/include/glm/./ext/vector_relational.inl \
+  /usr/local/include/glm/./ext/../vector_relational.hpp \
+  /usr/local/include/glm/./ext/../common.hpp \
+  /usr/local/include/glm/./ext/../detail/type_float.hpp \
+  /usr/local/include/glm/gtc/../ext/quaternion_common.hpp \
+  /usr/local/include/glm/./ext/../ext/quaternion_geometric.hpp \
+  /usr/local/include/glm/./ext/../exponential.hpp \
+  /usr/local/include/glm/./ext/../ext/vector_relational.hpp \
+  /usr/local/include/glm/./ext/quaternion_geometric.inl \
+  /usr/local/include/glm/./ext/quaternion_common.inl \
+  /usr/local/include/glm/gtc/../ext/quaternion_float.hpp \
+  /usr/local/include/glm/./ext/../detail/type_quat.hpp \
+  /usr/local/include/glm/detail/../detail/type_mat3x3.hpp \
+  /usr/local/include/glm/detail/../detail/type_mat4x4.hpp \
+  /usr/local/include/glm/detail/../detail/type_vec3.hpp \
+  /usr/local/include/glm/detail/../detail/type_vec4.hpp \
+  /usr/local/include/glm/detail/../ext/vector_relational.hpp \
+  /usr/local/include/glm/detail/../ext/quaternion_relational.hpp \
+  /usr/local/include/glm/./ext/quaternion_relational.inl \
+  /usr/local/include/glm/detail/../gtc/constants.hpp \
+  /usr/local/include/glm/detail/../gtc/matrix_transform.hpp \
+  /usr/local/include/glm/detail/type_quat.inl \
+  /usr/local/include/glm/detail/../trigonometric.hpp \
+  /usr/local/include/glm/detail/../ext/quaternion_geometric.hpp \
+  /usr/local/include/glm/gtc/../ext/quaternion_float_precision.hpp \
+  /usr/local/include/glm/gtc/../ext/quaternion_double.hpp \
+  /usr/local/include/glm/gtc/../ext/quaternion_double_precision.hpp \
+  /usr/local/include/glm/gtc/../ext/quaternion_relational.hpp \
+  /usr/local/include/glm/gtc/../ext/quaternion_geometric.hpp \
+  /usr/local/include/glm/gtc/../ext/quaternion_trigonometric.hpp \
+  /usr/local/include/glm/./ext/scalar_constants.hpp \
+  /usr/local/include/glm/./ext/vector_relational.hpp \
+  /usr/local/include/glm/./ext/quaternion_trigonometric.inl \
+  /usr/local/include/glm/gtc/../ext/quaternion_transform.hpp \
+  /usr/local/include/glm/./ext/quaternion_transform.inl \
+  /usr/local/include/glm/gtc/../detail/type_mat3x3.hpp \
+  /usr/local/include/glm/gtc/../detail/type_mat4x4.hpp \
+  /usr/local/include/glm/gtc/../detail/type_vec3.hpp \
+  /usr/local/include/glm/gtc/../detail/type_vec4.hpp \
+  /usr/local/include/glm/gtc/quaternion.inl \
+  /usr/local/include/glm/gtc/../exponential.hpp \
+  /usr/local/include/glm/gtc/epsilon.hpp \
+  /usr/local/include/glm/gtc/../detail/setup.hpp \
+  /usr/local/include/glm/gtc/../detail/qualifier.hpp \
+  /usr/local/include/glm/gtc/epsilon.inl \
+  /usr/local/include/glm/gtc/../vector_relational.hpp \
+  /usr/local/include/glm/gtc/../common.hpp \
+  /usr/local/include/glm/gtc/../gtc/vec1.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_bool1.hpp \
+  /usr/local/include/glm/./ext/../detail/type_vec1.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_bool1_precision.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_float1.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_float1_precision.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_double1.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_double1_precision.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_int1.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_int1_precision.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_uint1.hpp \
+  /usr/local/include/glm/gtc/../ext/vector_uint1_precision.hpp \
+  /usr/local/include/glm/gtc/../mat2x2.hpp \
+  /usr/local/include/glm/gtc/../mat2x3.hpp \
+  /usr/local/include/glm/gtc/../mat2x4.hpp \
+  /usr/local/include/glm/gtc/../mat3x2.hpp \
+  /usr/local/include/glm/gtc/../mat3x3.hpp \
+  /usr/local/include/glm/gtc/../mat3x4.hpp \
+  /usr/local/include/glm/gtc/../mat4x2.hpp \
+  /usr/local/include/glm/gtc/../mat4x3.hpp \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstring \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/string.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/string.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_types/_rsize_t.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_types/_errno_t.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_types/_ssize_t.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/strings.h \
+  /usr/local/include/glm/gtc/type_ptr.inl \
+  /usr/local/include/CSCI441/objects.hpp \
+  /usr/local/include/CSCI441/teapot.hpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstdio \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/stdio.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/stdio.h \
@@ -381,16 +486,8 @@ CMakeFiles/a3.dir/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_types/_seek_set.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/_ctermid.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_types/_off_t.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_types/_ssize_t.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstdlib \
-  /usr/local/include/GLFW/glfw3.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/cstring \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/string.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/string.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_types/_rsize_t.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/sys/_types/_errno_t.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/strings.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/set \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/map \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__algorithm/equal.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__algorithm/comp.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__type_traits/predicate_traits.h \
@@ -465,9 +562,9 @@ CMakeFiles/a3.dir/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__compare/compare_three_way.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__compare/three_way_comparable.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__compare/common_comparison_category.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__functional/binary_function.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__functional/is_transparent.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__functional/operations.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__functional/binary_function.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__functional/unary_function.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__type_traits/operation_traits.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__iterator/erase_if_container.h \
@@ -1023,144 +1120,4 @@ CMakeFiles/a3.dir/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__functional/pointer_to_binary_function.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__functional/pointer_to_unary_function.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__functional/unary_negate.h \
-  /usr/local/include/CSCI441/ShaderProgram.hpp \
-  /usr/local/include/CSCI441/ShaderUtils.hpp \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/fstream \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/filesystem \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/copy_options.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/directory_entry.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/file_status.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/file_type.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/perms.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/file_time_type.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__chrono/file_clock.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/filesystem_error.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/path.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/iomanip \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/istream \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/ostream \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/bitset \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/operations.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/perm_options.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/space_info.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/directory_iterator.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/directory_options.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/path_iterator.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/recursive_directory_iterator.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/__filesystem/u8path.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/map \
-  /usr/local/include/CSCI441/objects.hpp \
-  /usr/local/include/CSCI441/teapot.hpp \
-  /usr/local/include/glm/gtc/constants.hpp \
-  /usr/local/include/glm/gtc/../ext/scalar_constants.hpp \
-  /usr/local/include/glm/./ext/scalar_constants.inl \
-  /usr/local/include/glm/gtc/constants.inl \
-  /usr/local/include/glm/gtc/type_ptr.hpp \
-  /usr/local/include/glm/gtc/../gtc/quaternion.hpp \
-  /usr/local/include/glm/gtc/../gtc/constants.hpp \
-  /usr/local/include/glm/gtc/../gtc/matrix_transform.hpp \
-  /usr/local/include/glm/gtc/../mat4x4.hpp \
-  /usr/local/include/glm/gtc/../vec2.hpp \
-  /usr/local/include/glm/gtc/../vec3.hpp \
-  /usr/local/include/glm/gtc/../vec4.hpp \
-  /usr/local/include/glm/gtc/../ext/matrix_projection.hpp \
-  /usr/local/include/glm/./ext/../gtc/constants.hpp \
-  /usr/local/include/glm/./ext/../geometric.hpp \
-  /usr/local/include/glm/./ext/../trigonometric.hpp \
-  /usr/local/include/glm/./ext/../matrix.hpp \
-  /usr/local/include/glm/./ext/matrix_projection.inl \
-  /usr/local/include/glm/gtc/../ext/matrix_clip_space.hpp \
-  /usr/local/include/glm/./ext/../ext/scalar_constants.hpp \
-  /usr/local/include/glm/./ext/matrix_clip_space.inl \
-  /usr/local/include/glm/gtc/../ext/matrix_transform.hpp \
-  /usr/local/include/glm/./ext/matrix_transform.inl \
-  /usr/local/include/glm/gtc/matrix_transform.inl \
-  /usr/local/include/glm/gtc/../geometric.hpp \
-  /usr/local/include/glm/gtc/../trigonometric.hpp \
-  /usr/local/include/glm/gtc/../matrix.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_relational.hpp \
-  /usr/local/include/glm/./ext/../detail/qualifier.hpp \
-  /usr/local/include/glm/./ext/vector_relational.inl \
-  /usr/local/include/glm/./ext/../vector_relational.hpp \
-  /usr/local/include/glm/./ext/../common.hpp \
-  /usr/local/include/glm/./ext/../detail/type_float.hpp \
-  /usr/local/include/glm/gtc/../ext/quaternion_common.hpp \
-  /usr/local/include/glm/./ext/../ext/quaternion_geometric.hpp \
-  /usr/local/include/glm/./ext/../exponential.hpp \
-  /usr/local/include/glm/./ext/../ext/vector_relational.hpp \
-  /usr/local/include/glm/./ext/quaternion_geometric.inl \
-  /usr/local/include/glm/./ext/quaternion_common.inl \
-  /usr/local/include/glm/gtc/../ext/quaternion_float.hpp \
-  /usr/local/include/glm/./ext/../detail/type_quat.hpp \
-  /usr/local/include/glm/detail/../detail/type_mat3x3.hpp \
-  /usr/local/include/glm/detail/../detail/type_mat4x4.hpp \
-  /usr/local/include/glm/detail/../detail/type_vec3.hpp \
-  /usr/local/include/glm/detail/../detail/type_vec4.hpp \
-  /usr/local/include/glm/detail/../ext/vector_relational.hpp \
-  /usr/local/include/glm/detail/../ext/quaternion_relational.hpp \
-  /usr/local/include/glm/./ext/quaternion_relational.inl \
-  /usr/local/include/glm/detail/../gtc/constants.hpp \
-  /usr/local/include/glm/detail/../gtc/matrix_transform.hpp \
-  /usr/local/include/glm/detail/type_quat.inl \
-  /usr/local/include/glm/detail/../trigonometric.hpp \
-  /usr/local/include/glm/detail/../ext/quaternion_geometric.hpp \
-  /usr/local/include/glm/gtc/../ext/quaternion_float_precision.hpp \
-  /usr/local/include/glm/gtc/../ext/quaternion_double.hpp \
-  /usr/local/include/glm/gtc/../ext/quaternion_double_precision.hpp \
-  /usr/local/include/glm/gtc/../ext/quaternion_relational.hpp \
-  /usr/local/include/glm/gtc/../ext/quaternion_geometric.hpp \
-  /usr/local/include/glm/gtc/../ext/quaternion_trigonometric.hpp \
-  /usr/local/include/glm/./ext/scalar_constants.hpp \
-  /usr/local/include/glm/./ext/vector_relational.hpp \
-  /usr/local/include/glm/./ext/quaternion_trigonometric.inl \
-  /usr/local/include/glm/gtc/../ext/quaternion_transform.hpp \
-  /usr/local/include/glm/./ext/quaternion_transform.inl \
-  /usr/local/include/glm/gtc/../detail/type_mat3x3.hpp \
-  /usr/local/include/glm/gtc/../detail/type_mat4x4.hpp \
-  /usr/local/include/glm/gtc/../detail/type_vec3.hpp \
-  /usr/local/include/glm/gtc/../detail/type_vec4.hpp \
-  /usr/local/include/glm/gtc/quaternion.inl \
-  /usr/local/include/glm/gtc/../exponential.hpp \
-  /usr/local/include/glm/gtc/epsilon.hpp \
-  /usr/local/include/glm/gtc/../detail/setup.hpp \
-  /usr/local/include/glm/gtc/../detail/qualifier.hpp \
-  /usr/local/include/glm/gtc/epsilon.inl \
-  /usr/local/include/glm/gtc/../vector_relational.hpp \
-  /usr/local/include/glm/gtc/../common.hpp \
-  /usr/local/include/glm/gtc/../gtc/vec1.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_bool1.hpp \
-  /usr/local/include/glm/./ext/../detail/type_vec1.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_bool1_precision.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_float1.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_float1_precision.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_double1.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_double1_precision.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_int1.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_int1_precision.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_uint1.hpp \
-  /usr/local/include/glm/gtc/../ext/vector_uint1_precision.hpp \
-  /usr/local/include/glm/gtc/../mat2x2.hpp \
-  /usr/local/include/glm/gtc/../mat2x3.hpp \
-  /usr/local/include/glm/gtc/../mat2x4.hpp \
-  /usr/local/include/glm/gtc/../mat3x2.hpp \
-  /usr/local/include/glm/gtc/../mat3x3.hpp \
-  /usr/local/include/glm/gtc/../mat3x4.hpp \
-  /usr/local/include/glm/gtc/../mat4x2.hpp \
-  /usr/local/include/glm/gtc/../mat4x3.hpp \
-  /usr/local/include/glm/gtc/type_ptr.inl \
-  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/ArcBall.hpp \
-  /usr/local/include/CSCI441/PerspectiveCamera.hpp \
-  /usr/local/include/CSCI441/Camera.hpp \
-  /usr/local/include/glm/gtc/matrix_transform.hpp \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/iostream \
-  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/Tav.h \
-  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/Being.h \
-  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/FreeCam.h \
-  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/horse.h \
-  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/Car.h \
-  /usr/local/include/CSCI441/ModelLoader.hpp \
-  /usr/local/include/CSCI441/modelMaterial.hpp \
-  /usr/local/include/glm/ext/vector_float4.hpp \
-  /usr/local/include/stb_image.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk/usr/include/c++/v1/sstream \
-  /usr/local/include/CSCI441/TextureUtils.hpp
+  /usr/local/include/CSCI441/OpenGLUtils.hpp

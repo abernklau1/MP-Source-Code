@@ -1157,6 +1157,7 @@ CMakeFiles/a3.dir/MPEngine.cpp.o: \
   /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/Being.h \
   /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/FreeCam.h \
   /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/horse.h \
+  /Users/gabby/Desktop/MidtermProject/MP-Source-Code/src/Car.h \
   /usr/local/include/CSCI441/ModelLoader.hpp \
   /usr/local/include/CSCI441/modelMaterial.hpp \
   /usr/local/include/glm/ext/vector_float4.hpp \
