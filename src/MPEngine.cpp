@@ -23,6 +23,7 @@ MPEngine::MPEngine( )
     : CSCI441::OpenGLEngine( 4, 1, 640, 480, "MP: Tav" )
 {
   _pFreeCam = new FreeCam( );
+
   for ( auto& _key : _keys )
     _key = GL_FALSE;
 
@@ -45,12 +46,12 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
 
   if ( action == GLFW_PRESS || action == GLFW_REPEAT )
   {
-    if ( _keys[GLFW_KEY_Y] )
+    if ( _keys[GLFW_KEY_Y] && _pActiveCamera == _pFreeCam )
     {
       _pFreeCam->moveForward( 0.1 );
       _pArcballCam->setCameraPosition( _pFreeCam->getPosition( ) );
     }
-    if ( _keys[GLFW_KEY_H] )
+    if ( _keys[GLFW_KEY_H] && _pActiveCamera == _pFreeCam )
     {
       _pFreeCam->moveBackward( 0.1 );
       _pArcballCam->setCameraPosition( _pFreeCam->getPosition( ) );
@@ -91,12 +92,25 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
       _pFreeCam->recomputeOrientation( );
       _pActiveCamera = _pFreeCam;
     }
+    if ( key == GLFW_KEY_3 )
+    {
+      _toggleFirst = !_toggleFirst;
+    }
     switch ( key )
     {
       // Toggle cameras
-      case GLFW_KEY_T: _currentCharacter = 0; break;
-      case GLFW_KEY_B: _currentCharacter = 1; break;
-      case GLFW_KEY_R: _currentCharacter = 2; break;
+      case GLFW_KEY_T:
+        _currentCharacter = 0;
+        _angle            = _pTav->_rotationY;
+        break;
+      case GLFW_KEY_B:
+        _currentCharacter = 1;
+        _angle            = _pBeing->toRotate;
+        break;
+      case GLFW_KEY_R:
+        _currentCharacter = 2;
+        _angle            = _pHorse->_horseAngle;
+        break;
       // quit!
       case GLFW_KEY_Q:
       case GLFW_KEY_ESCAPE: setWindowShouldClose( ); break;
@@ -138,6 +152,7 @@ void MPEngine::handleCursorPositionEvent( glm::vec2 currMousePosition )
       // Zoom based on vertical mouse movement
       if ( _pActiveCamera == _pArcballCam )
       {
+
         float zoomAmount = ( currMousePosition.y - _mousePosition.y ) * 0.01f;
         _pArcballCam->zoom( zoomAmount );
       }
@@ -151,6 +166,7 @@ void MPEngine::handleCursorPositionEvent( glm::vec2 currMousePosition )
       }
       else
       {
+
         _pFreeCam->rotate( ( currMousePosition.x - _mousePosition.x ) * 0.005f, ( _mousePosition.y - currMousePosition.y ) * 0.005f );
       }
     }
@@ -322,6 +338,7 @@ void MPEngine::_generateEnvironment( )
 {
   //******************************************************************
   // cottage time
+
   //******************************************************************
 
   srand( time( 0 ) ); // seed our RNG
@@ -392,7 +409,9 @@ void MPEngine::_generateEnvironment( )
 
 void MPEngine::mSetupScene( )
 {
-  _pArcballCam = new ArcBall( );
+  _pArcballCam     = new ArcBall( );
+  _pFreeCam        = new FreeCam( );
+  _pFirstPersonCam = new FirstPerson( );
   glm::vec3 targetPosition;
   if ( _currentCharacter == 0 )
   {
@@ -405,7 +424,6 @@ void MPEngine::mSetupScene( )
   else if ( _currentCharacter == 2 )
   {
     targetPosition = _pHorse->getHorsePos( );
-    std::cout << "tX: " << targetPosition.x << "tY: " << targetPosition.y << "tZ: " << targetPosition.z;
   }
 
   // Define an offset vector for the camera
@@ -483,6 +501,13 @@ void MPEngine::mCleanupTextures( )
   glDeleteTextures( 1, reinterpret_cast<const GLuint*>( &_skyTex ) );
 }
 
+void MPEngine::mCleanupTextures( )
+{
+  fprintf( stdout, "[INFO]: ...deleting textures\n" );
+  // TODO #23 - delete textures
+  glDeleteTextures( 1, reinterpret_cast<const GLuint*>( &_skyTex ) );
+}
+
 //*************************************************************************************
 //
 // Rendering / Drawing Functions - this is where the magic happens!
@@ -539,6 +564,7 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   glDrawElements( GL_TRIANGLE_STRIP, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0 );
   //// END DRAWING THE GROUND PLANE ////
 
+  //// END SKYBOX /////
   //// BEGIN DRAWING THE BUILDINGS ////
   for ( const TreeData& currentTree : _trees )
   {
@@ -618,7 +644,7 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   modelMtx2 = glm::translate( modelMtx2, _pBeing->getPosition( ) );
   _pBeing->drawPerson( modelMtx2, viewMtx, projMtx );
   glm::mat4 modelMtx3( 1.0f );
-  // modelMtx3 = glm::translate( modelMtx2, _pHorse->getHorsePos() );
+
   _pHorse->drawHorse( modelMtx3, viewMtx, projMtx );
 
   //// END DRAWING TAV ////
@@ -697,6 +723,7 @@ void MPEngine::_updateScene( )
     {
       _pHorse->turnLeft( );
     }
+    _angle -= _pTav->tavRotationSpeed;
   }
   if ( _keys[GLFW_KEY_A] || _keys[GLFW_KEY_LEFT] )
   {
@@ -712,11 +739,13 @@ void MPEngine::_updateScene( )
     {
       _pHorse->turnRight( );
     }
+    _angle += _pTav->tavRotationSpeed;
   }
 
   // Calculate the direction of movement
   glm::vec3 direction;
   glm::vec3 position;
+
   if ( _currentCharacter == 0 )
   {
     position  = _pTav->getPosition( );
@@ -735,6 +764,22 @@ void MPEngine::_updateScene( )
 
   // Update the camera's position by adding the direction to the current position
   _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
+
+  _pFirstPersonCam->setTheta( -_angle );
+
+  _pFirstPersonCam->setPhi( 0 );
+  _pFirstPersonCam->setCameraDirection( direction );
+  if ( _currentCharacter == 2 )
+  {
+    _pFirstPersonCam->setCameraPosition( position + glm::vec3( 0.1f, 4.0f, 0.0f ) );
+  }
+  else
+  {
+    _pFirstPersonCam->setCameraPosition( position + glm::vec3( 0.0f, 1.0f, 0.0f ) );
+  }
+
+  //_pFirstPersonCam->updatePosition( position, direction );
+  _pFirstPersonCam->recomputeOrientation( );
 
   // Update the camera's look-at point to be the player's position
   _pArcballCam->setCameraLookAtPoint( position );
@@ -772,6 +817,14 @@ void MPEngine::run( )
 
     // draw everything to the window
     _renderScene( _pActiveCamera->getViewMatrix( ), _pActiveCamera->getProjectionMatrix( ) );
+
+    if ( _toggleFirst )
+    {
+      printf( "first person toggled\n" );
+      glViewport( 0, 0, 200, 200 );
+      glClear( GL_DEPTH_BUFFER_BIT );
+      _renderScene( _pFirstPersonCam->getViewMatrix( ), _pFirstPersonCam->getProjectionMatrix( ) );
+    }
 
     _updateScene( );
 

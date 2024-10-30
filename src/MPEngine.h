@@ -1,12 +1,10 @@
-#ifndef MP_ENGINE_H
-#define MP_ENGINE_H
-
 #include "ArcBall.hpp"
 #include "Being.h"
 #include "FirstPerson.hpp"
 #include "FreeCam.h"
 #include "Tav.h"
 #include "horse.h"
+
 #include <CSCI441/ModelLoader.hpp>
 #include <CSCI441/OpenGLEngine.hpp>
 #include <CSCI441/ShaderProgram.hpp>
@@ -14,6 +12,9 @@
 #include <CSCI441/objects.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+
+#ifndef MP_ENGINE_H
+  #define MP_ENGINE_H
 
 class MPEngine final : public CSCI441::OpenGLEngine
 {
@@ -43,6 +44,7 @@ class MPEngine final : public CSCI441::OpenGLEngine
 
   private:
     bool _toggleFirst = false;
+
     FreeCam* _pFreeCam;
     FirstPerson* _pFirstPersonCam;
     // parameters to make up our grid size and spacing, feel free to

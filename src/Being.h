@@ -25,20 +25,22 @@ class Being
     void drawPerson( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx );
 
     /// \desc simulates the plane flying forward by rotating the propeller clockwise
+
     void rotateSelf( GLfloat rotationFactor );
     void moveNose( );
+
     glm::vec3 getPosition( );
     void setPosition( glm::vec3 position );
     glm::vec3 getForwardDirection( );
     void setForwardDirection( );
     void moveForward( GLfloat movementFactor );
     void moveBackward( GLfloat movementFactor );
+    float toRotate = 0;
 
   private:
     glm::vec3 _forwardDirection;
     glm::vec3 _position;
     int moveNoseBy = 0;
-    float toRotate = 0;
     glm::vec3 facing;
     /// \desc current angle of rotation for the propeller
     GLfloat _propAngle;
@@ -100,17 +102,22 @@ class Being
     /// \param viewMtx camera view matrix to apply to plane
     /// \param projMtx camera projection matrix to apply to plane
     void _drawBody( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx ) const;
+
     /// \desc draws a single wing
     /// \param isLeftWing true if left wing, false if right wing (controls wing rotation)
     /// \param modelMtx existing model matrix to apply to plane
     /// \param viewMtx camera view matrix to apply to plane
     /// \param projMtx camera projection matrix to apply to plane
+
     void _drawArms( bool isLeftWing, glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx ) const;
+
     /// \desc draws the nose of the plane
     /// \param modelMtx existing model matrix to apply to plane
     /// \param viewMtx camera view matrix to apply to plane
     /// \param projMtx camera projection matrix to apply to plane
+
     void _drawNose( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx ) const;
+
     /// \desc draws the two propeller pieces
     /// \param modelMtx existing model matrix to apply to plane
     /// \param viewMtx camera view matrix to apply to plane
