@@ -36,6 +36,7 @@ MPEngine::~MPEngine( )
   delete _pTav;
   delete _pBeing;
   delete _pHorse;
+  delete _pCar;
 }
 
 void MPEngine::handleKeyEvent( GLint key, GLint action )
@@ -67,6 +68,8 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
         targetPosition = _pBeing->getPosition( );
       } else if(_currentCharacter == 2){
           targetPosition = _pHorse->getHorsePos();
+      } else if(_currentCharacter == 3){
+          targetPosition = _pCar->getPosition();
       }
 
       _pFreeCam->setPosition(_pArcballCam->getPosition());
@@ -205,7 +208,7 @@ void MPEngine::mSetupBuffers( )
   _pBeing =
       new Being( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor );
   _pHorse = new horse( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor, GRID_WIDTH + 5.0f);
-
+  _pCar = new Car( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor );
 
   _pObjModel = new CSCI441::ModelLoader();
   _pObjModel->enableAutoGenerateNormals();
@@ -363,6 +366,8 @@ void MPEngine::mSetupScene( )
   } else if (_currentCharacter == 2){
       targetPosition = _pHorse->getHorsePos();
       std::cout<<"tX: "<<targetPosition.x<<"tY: "<<targetPosition.y<<"tZ: "<<targetPosition.z;
+  } else if(_currentCharacter == 3) {
+      targetPosition = _pCar->getPosition();
   }
 
 
@@ -538,7 +543,7 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   glm::mat4 modelMtx3( 1.0f );
   //modelMtx3 = glm::translate( modelMtx2, _pHorse->getHorsePos() );
   _pHorse->drawHorse( modelMtx3, viewMtx, projMtx );
-
+  _pCar->drawCar(modelMtx3, viewMtx, projMtx);
   //// END DRAWING TAV ////
 }
 
@@ -564,6 +569,9 @@ void MPEngine::_updateScene( )
   if(_currentCharacter==2) {
       currentPosition = _pHorse->getHorsePos();
   }
+  if(_currentCharacter==3) {
+      currentPosition = _pCar->getPosition();
+  }
 
   // Calculate the new position based on input
   glm::vec3 newPosition = currentPosition;
@@ -579,6 +587,9 @@ void MPEngine::_updateScene( )
     if(_currentCharacter==2){
         _pHorse->moveForward();
     }
+    if(_currentCharacter==3){
+        _pCar->moveForward();
+    }
   }
   if ( _keys[GLFW_KEY_S] || _keys[GLFW_KEY_DOWN] )
   {
@@ -591,6 +602,9 @@ void MPEngine::_updateScene( )
     if(_currentCharacter == 2){
         _pHorse->moveBackward();
     }
+    if(_currentCharacter==3){
+        _pCar->moveBackward();
+    }
   }
   if ( _keys[GLFW_KEY_D] || _keys[GLFW_KEY_RIGHT] )
   {
@@ -601,6 +615,8 @@ void MPEngine::_updateScene( )
       _pBeing->rotateSelf(-_pTav->tavRotationSpeed);
     } else if (_currentCharacter==2){
         _pHorse->turnLeft();
+    } else if (_currentCharacter == 3){
+        _pCar->turnLeft();
     }
   }
   if ( _keys[GLFW_KEY_A] || _keys[GLFW_KEY_LEFT] )
@@ -611,6 +627,8 @@ void MPEngine::_updateScene( )
       _pBeing->rotateSelf(_pTav->tavRotationSpeed);
     } else if (_currentCharacter==2){
         _pHorse->turnRight();
+    } else if (_currentCharacter == 3){
+        _pCar->turnRight();
     }
   }
 
@@ -626,6 +644,9 @@ void MPEngine::_updateScene( )
   } else if(_currentCharacter==2) {
       position = _pHorse->getHorsePos( );
       direction = position - _pArcballCam->getLookAtPoint( );
+  } else if(_currentCharacter == 3){
+      position = _pCar->getPosition();
+      direction = position - _pArcballCam->getLookAtPoint();
   }
 
 

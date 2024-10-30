@@ -10,6 +10,7 @@
 #include "Being.h"
 #include "FreeCam.h"
 #include "horse.h"
+#include "Car.h"
 #include <vector>
 #include <CSCI441/ModelLoader.hpp>
 #include <CSCI441/TextureUtils.hpp>
@@ -91,6 +92,7 @@ class MPEngine final : public CSCI441::OpenGLEngine
     Tav* _pTav;
     Being* _pBeing;
     horse* _pHorse;
+    Car* _pCar;
     int _currentCharacter = 0;
 
     GLint _skyTex;

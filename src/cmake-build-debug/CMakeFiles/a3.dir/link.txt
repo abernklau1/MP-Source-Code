@@ -1,3 +1,1 @@
-"C:\Program Files\JetBrains\CLion 2022.3.2\bin\cmake\win\x64\bin\cmake.exe" -E rm -f CMakeFiles\a3.dir/objects.a
-C:\MinGW\bin\ar.exe qc CMakeFiles\a3.dir/objects.a @CMakeFiles\a3.dir\objects1.rsp
-C:\MinGW\bin\c++.exe -g -Wl,--whole-archive CMakeFiles\a3.dir/objects.a -Wl,--no-whole-archive -o a3.exe -Wl,--out-implib,liba3.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\a3.dir\linklibs.rsp
+/Library/Developer/CommandLineTools/usr/bin/c++ -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/a3.dir/main.cpp.o CMakeFiles/a3.dir/MPEngine.cpp.o CMakeFiles/a3.dir/Tav.cpp.o CMakeFiles/a3.dir/Being.cpp.o CMakeFiles/a3.dir/FreeCam.cpp.o CMakeFiles/a3.dir/horse.cpp.o CMakeFiles/a3.dir/Car.cpp.o -o a3   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -lglfw3 -lglad 

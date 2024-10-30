@@ -2,3 +2,4 @@
 .vs_code
 ./src/build
 ./src/cmake-build-debug
+./.idea
