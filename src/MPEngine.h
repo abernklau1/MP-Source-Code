@@ -1,18 +1,24 @@
 #ifndef MP_ENGINE_H
 #define MP_ENGINE_H
 
+#include "ArcBall.hpp"
+#include "Being.h"
+#include "FirstPerson.hpp"
+#include "FreeCam.h"
+#include "Tav.h"
+#include "horse.h"
+#include <CSCI441/ModelLoader.hpp>
 #include <CSCI441/OpenGLEngine.hpp>
 #include <CSCI441/ShaderProgram.hpp>
+#include <CSCI441/TextureUtils.hpp>
 #include <CSCI441/objects.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include "ArcBall.hpp"
-#include "Tav.h"
 #include <vector>
 
 class MPEngine final : public CSCI441::OpenGLEngine
 {
   public:
+    float _angle = 0;
     MPEngine( );
     ~MPEngine( ) final;
 
@@ -36,6 +42,9 @@ class MPEngine final : public CSCI441::OpenGLEngine
     static constexpr GLfloat MOUSE_UNINITIALIZED = -9999.0f;
 
   private:
+    bool _toggleFirst = false;
+    FreeCam* _pFreeCam;
+    FirstPerson* _pFirstPersonCam;
     // parameters to make up our grid size and spacing, feel free to
     // play around with this
     const GLfloat GRID_WIDTH          = WORLD_SIZE * 1.8f;
@@ -84,7 +93,11 @@ class MPEngine final : public CSCI441::OpenGLEngine
     glm::vec2 _cameraSpeed;
 
     Tav* _pTav;
+    Being* _pBeing;
+    horse* _pHorse;
+    int _currentCharacter = 0;
 
+    GLint _skyTex;
     /// \desc the size of the world (controls the ground size and locations of buildings)
     static constexpr GLfloat WORLD_SIZE = 55.0f;
     /// \desc VAO for our ground
@@ -112,13 +125,34 @@ class MPEngine final : public CSCI441::OpenGLEngine
         bool isTwoTrees;
     };
 
-    std::vector<TreeData> _trees;
+    struct PlantData
+    {
+        /// \desc transformations to position and size the building
+        glm::mat4 modelMatrix;
+        /// \desc color to draw the building
+        glm::vec3 color = glm::vec3( 0.1063, 0.58, 0 );
+    };
 
+    struct BunnyData
+    {
+        /// \desc transformations to position and size the building
+        glm::mat4 modelMatrix;
+        /// \desc color to draw the building
+        glm::vec3 color = glm::vec3( 1, 1, 1 );
+    };
+
+    std::vector<TreeData> _trees;
+    std::vector<PlantData> _plants;
+    std::vector<BunnyData> _bunnies;
     void _drawSingleTree( const TreeData& treeData, glm::mat4 viewMtx, glm::mat4 projMtx ) const;
     void _drawTwoTrees( const TreeData& treeData, glm::mat4 viewMtx, glm::mat4 projMtx ) const;
 
     /// \desc information list of all the buildings to draw
     std::vector<BuildingData> _buildings;
+
+    CSCI441::ModelLoader* _pObjModel;
+    CSCI441::ModelLoader* _pObjModelB;
+    CSCI441::ModelLoader* _pObjModelC;
 
     /// \desc generates building information to make up our scene
     void _generateEnvironment( );
@@ -131,6 +165,7 @@ class MPEngine final : public CSCI441::OpenGLEngine
     {
         /// \desc precomputed MVP matrix location
         GLint mvpMatrix;
+        GLint modelMatrix;
         /// \desc material diffuse color location
         GLint materialColor;
         // TODO #1: add new uniforms
@@ -139,6 +174,7 @@ class MPEngine final : public CSCI441::OpenGLEngine
         GLuint lightColor;
 
         GLint cameraDirection;
+        GLint cameraPosition;
 
     } _lightingShaderUniformLocations;
 
@@ -152,6 +188,21 @@ class MPEngine final : public CSCI441::OpenGLEngine
 
     } _lightingShaderAttributeLocations;
 
+  private:
+    CSCI441::ShaderProgram* _skyboxShaderProgram;
+
+    struct SkyboxShaderUniformLocations
+    {
+        GLint modelMatrix;
+        GLint viewMatrix;
+        GLint projectionMatrix;
+        GLint skyboxTexture;
+    } _skyboxShaderUniformLocations;
+
+    GLuint _skyboxVAO, _skyboxVBO;
+
+    void _createSkyboxBuffers( );
+
     /// \desc precomputes the matrix uniforms CPU-side and then sends them
     /// to the GPU to be used in the shader for each vertex.  It is more efficient
     /// to calculate these once and then use the resultant product in the shader.
@@ -159,6 +210,12 @@ class MPEngine final : public CSCI441::OpenGLEngine
     /// \param viewMtx camera view matrix
     /// \param projMtx camera projection matrix
     void _computeAndSendMatrixUniforms( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx ) const;
+
+    GLuint _loadAndRegisterTexture( const char* FILENAME );
+
+    void mSetupTextures( );
+
+    void mCleanupTextures( );
 };
 
 void a3_engine_keyboard_callback( GLFWwindow* window, int key, int scancode, int action, int mods );

@@ -1,6 +1,6 @@
 #include <CSCI441/PerspectiveCamera.hpp>
 #include <glm/glm.hpp>
-#include <glm/gtx/string_cast.hpp>
+//#include <glm/gtx/string_cast.hpp>
 #include <iostream>
 
 #ifndef _FIRST_PERSON_H_
@@ -19,6 +19,7 @@ public:
   void moveBackward( GLfloat movementFactor );
 
   void recomputeOrientation( );
+    void setCameraDirection(glm::vec3 direction );
 
 };
 
@@ -29,6 +30,7 @@ inline void FirstPerson::updatePosition(glm::vec3 position, glm::vec3 forwardDir
     setCameraPosition(position);
     setCameraLookAtPoint(position + forwardDirection);
 }
+inline void FirstPerson::setCameraDirection( glm::vec3 direction ) { mCameraDirection = direction; }
 
 inline void FirstPerson::setCameraPosition(glm::vec3 position) {
     mCameraPosition = position;

@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.14)
-project(a3)
+project(mp)
 set(CMAKE_CXX_STANDARD 17)
-set(SOURCE_FILES main.cpp MPEngine.cpp MPEngine.h Tav.cpp Tav.h ArcBall.hpp)
+set(SOURCE_FILES main.cpp MPEngine.cpp MPEngine.h Tav.cpp Tav.h ArcBall.hpp Being.h Being.cpp FreeCam.h
+        FreeCam.cpp
+        horse.cpp
+        horse.h)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

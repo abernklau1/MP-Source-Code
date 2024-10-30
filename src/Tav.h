@@ -46,6 +46,7 @@ class Tav
     GLfloat tavRotationSpeed;
 
     void update( );
+    GLfloat _rotationY = 0;
 
   private:
     /// \desc handle of the shader program to use when drawing the plane
@@ -74,7 +75,7 @@ class Tav
     glm::vec3 _tavStaffTipColor;
 
     GLfloat _rotationX;
-    GLfloat _rotationY;
+    GLfloat _rotationY = 0;
 
     glm::vec3 _forwardDirection;
 
