@@ -45,11 +45,58 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
 
   if ( action == GLFW_PRESS || action == GLFW_REPEAT )
   {
+    if ( _keys[GLFW_KEY_Y] )
+    {
+      _pFreeCam->moveForward( 0.1 );
+      _pArcballCam->setCameraPosition( _pFreeCam->getPosition( ) );
+    }
+    if ( _keys[GLFW_KEY_H] )
+    {
+      _pFreeCam->moveBackward( 0.1 );
+      _pArcballCam->setCameraPosition( _pFreeCam->getPosition( ) );
+    }
+    if ( key == GLFW_KEY_1 )
+    {
+      _pActiveCamera = _pArcballCam;
+    }
+    else if ( key == GLFW_KEY_2 )
+    {
+      glm::vec3 targetPosition;
+      if ( _currentCharacter == 0 )
+      {
+        targetPosition = _pTav->getPosition( );
+      }
+      else if ( _currentCharacter == 1 )
+      {
+        targetPosition = _pBeing->getPosition( );
+      }
+      else if ( _currentCharacter == 2 )
+      {
+        targetPosition = _pHorse->getHorsePos( );
+      }
+
+      _pFreeCam->setPosition( _pArcballCam->getPosition( ) );
+
+      _pFreeCam->setPosition( _pArcballCam->getPosition( ) );
+
+      // Compute the direction vector for FreeCam
+      glm::vec3 freeCamDirection = glm::normalize( targetPosition - _pFreeCam->getPosition( ) );
+
+      // Compute Theta and Phi based on FreeCam's definitions
+      GLfloat phi   = acos( freeCamDirection.y );
+      GLfloat theta = atan2( freeCamDirection.z, freeCamDirection.x );
+
+      _pFreeCam->setTheta( theta );
+      _pFreeCam->setPhi( phi );
+      _pFreeCam->recomputeOrientation( );
+      _pActiveCamera = _pFreeCam;
+    }
     switch ( key )
     {
       // Toggle cameras
-      case GLFW_KEY_1: _pActiveCamera = _pArcballCam; break;
-      case GLFW_KEY_2: _pActiveCamera = _pArcballCam; break;
+      case GLFW_KEY_T: _currentCharacter = 0; break;
+      case GLFW_KEY_B: _currentCharacter = 1; break;
+      case GLFW_KEY_R: _currentCharacter = 2; break;
       // quit!
       case GLFW_KEY_Q:
       case GLFW_KEY_ESCAPE: setWindowShouldClose( ); break;
@@ -155,14 +202,25 @@ void MPEngine::mSetupShaders( )
   _lightingShaderAttributeLocations.vPos = _lightingShaderProgram->getAttributeLocation( "vPos" );
   // assign attributes
   _lightingShaderAttributeLocations.vNormal = _lightingShaderProgram->getAttributeLocation( "vNormal" );
+
+  // Set up the skybox shader program
+  _skyboxShaderProgram = new CSCI441::ShaderProgram( "shaders/skybox.v.glsl", "shaders/skybox.f.glsl" );
+
+  // Get uniform locations
+  _skyboxShaderUniformLocations.modelMatrix      = _skyboxShaderProgram->getUniformLocation( "model" );
+  _skyboxShaderUniformLocations.viewMatrix       = _skyboxShaderProgram->getUniformLocation( "view" );
+  _skyboxShaderUniformLocations.projectionMatrix = _skyboxShaderProgram->getUniformLocation( "projection" );
+  _skyboxShaderUniformLocations.skyboxTexture    = _skyboxShaderProgram->getUniformLocation( "skyboxTexture" );
 }
+
+void MPEngine::mSetupTextures( ) { _skyTex = _loadAndRegisterSkyboxTexture( "textures/cubeMapFrozen.jpg" ); }
 
 void MPEngine::mSetupBuffers( )
 {
-  // Need to connect our 3D Object Library to our shader
+  // TODO #4: need to connect our 3D Object Library to our shader
   CSCI441::setVertexAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
 
-  // Give the plane the normal matrix location
+  // give the plane the normal matrix location
   _pTav =
       new Tav( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor );
   _pBeing =
@@ -334,8 +392,21 @@ void MPEngine::_generateEnvironment( )
 
 void MPEngine::mSetupScene( )
 {
-  _pArcballCam             = new ArcBall( );
-  glm::vec3 targetPosition = _pTav->getPosition( );
+  _pArcballCam = new ArcBall( );
+  glm::vec3 targetPosition;
+  if ( _currentCharacter == 0 )
+  {
+    targetPosition = _pTav->getPosition( );
+  }
+  else if ( _currentCharacter == 1 )
+  {
+    targetPosition = _pBeing->getPosition( );
+  }
+  else if ( _currentCharacter == 2 )
+  {
+    targetPosition = _pHorse->getHorsePos( );
+    std::cout << "tX: " << targetPosition.x << "tY: " << targetPosition.y << "tZ: " << targetPosition.z;
+  }
 
   // Define an offset vector for the camera
   _cameraOffset = glm::vec3( 0.0f, 5.0f, 10.0f );
@@ -408,6 +479,7 @@ void MPEngine::mCleanupBuffers( )
 void MPEngine::mCleanupTextures( )
 {
   fprintf( stdout, "[INFO]: ...deleting textures\n" );
+  // TODO #23 - delete textures
   glDeleteTextures( 1, reinterpret_cast<const GLuint*>( &_skyTex ) );
 }
 
@@ -425,7 +497,7 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
 
   // First, render the skybox
   glDepthFunc( GL_LEQUAL ); // Change depth function for skybox
-  glDepthMask( GL_FALSE );
+  glDepthMask( GL_FALSE );  // Disable depth writing
 
   _skyboxShaderProgram->useProgram( );
 
@@ -466,11 +538,7 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   glBindVertexArray( _groundVAO );
   glDrawElements( GL_TRIANGLE_STRIP, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0 );
   //// END DRAWING THE GROUND PLANE ////
-  //// SKYBOXXXXXXX TIME!!!! /////
-  glBindTexture( GL_TEXTURE_2D, _skyTex );
-  CSCI441::drawCubeMap( WORLD_SIZE * 3 );
 
-  //// END SKYBOX /////
   //// BEGIN DRAWING THE BUILDINGS ////
   for ( const TreeData& currentTree : _trees )
   {
@@ -617,12 +685,33 @@ void MPEngine::_updateScene( )
   }
   if ( _keys[GLFW_KEY_D] || _keys[GLFW_KEY_RIGHT] )
   {
-
-    _pTav->rotate( -_pTav->tavRotationSpeed );
+    if ( _currentCharacter == 0 )
+    {
+      _pTav->rotate( -_pTav->tavRotationSpeed );
+    }
+    if ( _currentCharacter == 1 )
+    {
+      _pBeing->rotateSelf( -_pTav->tavRotationSpeed );
+    }
+    else if ( _currentCharacter == 2 )
+    {
+      _pHorse->turnLeft( );
+    }
   }
   if ( _keys[GLFW_KEY_A] || _keys[GLFW_KEY_LEFT] )
   {
-    _pTav->rotate( _pTav->tavRotationSpeed );
+    if ( _currentCharacter == 0 )
+    {
+      _pTav->rotate( _pTav->tavRotationSpeed );
+    }
+    else if ( _currentCharacter == 1 )
+    {
+      _pBeing->rotateSelf( _pTav->tavRotationSpeed );
+    }
+    else if ( _currentCharacter == 2 )
+    {
+      _pHorse->turnRight( );
+    }
   }
 
   // Calculate the direction of movement
@@ -646,22 +735,6 @@ void MPEngine::_updateScene( )
 
   // Update the camera's position by adding the direction to the current position
   _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
-
-  _pFirstPersonCam->setTheta( -_angle );
-
-  _pFirstPersonCam->setPhi( 0 );
-  _pFirstPersonCam->setCameraDirection( direction );
-  if ( _currentCharacter == 2 )
-  {
-    _pFirstPersonCam->setCameraPosition( position + glm::vec3( 0.1f, 4.0f, 0.0f ) );
-  }
-  else
-  {
-    _pFirstPersonCam->setCameraPosition( position + glm::vec3( 0.0f, 1.0f, 0.0f ) );
-  }
-
-  //_pFirstPersonCam->updatePosition( position, direction );
-  _pFirstPersonCam->recomputeOrientation( );
 
   // Update the camera's look-at point to be the player's position
   _pArcballCam->setCameraLookAtPoint( position );
@@ -700,14 +773,6 @@ void MPEngine::run( )
     // draw everything to the window
     _renderScene( _pActiveCamera->getViewMatrix( ), _pActiveCamera->getProjectionMatrix( ) );
 
-    if ( _toggleFirst )
-    {
-      printf( "first person toggled\n" );
-      glViewport( 0, 0, 200, 200 );
-      glClear( GL_DEPTH_BUFFER_BIT );
-      _renderScene( _pFirstPersonCam->getViewMatrix( ), _pFirstPersonCam->getProjectionMatrix( ) );
-    }
-
     _updateScene( );
 
     glfwSwapBuffers( mpWindow ); // flush the OpenGL commands and make sure they get rendered!
@@ -715,9 +780,111 @@ void MPEngine::run( )
   }
 }
 
+// for our beautiful textures
+GLuint MPEngine::_loadAndRegisterTexture( const char* FILENAME )
+{
+  // our handle to the GPU
+  GLuint textureHandle = 0;
+
+  // enable setting to prevent image from being upside down
+  stbi_set_flip_vertically_on_load( true );
+
+  // will hold image parameters after load
+  GLint imageWidth, imageHeight, imageChannels;
+  // load image from file
+  GLubyte* data = stbi_load( FILENAME, &imageWidth, &imageHeight, &imageChannels, 0 );
+
+  // if data was read from file
+  if ( data )
+  {
+    const GLint STORAGE_TYPE = ( imageChannels == 4 ? GL_RGBA : GL_RGB );
+
+    // TODO #01 - generate a texture handle
+    glGenTextures( 1, &textureHandle );
+    // TODO #02 - bind it to be active
+    glBindTexture( GL_TEXTURE_2D, textureHandle );
+    // set texture parameters
+    // TODO #03 - mag filter
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    // TODO #04 - min filter
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    // TODO #05 - wrap s
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    // TODO #06 - wrap t
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    // TODO #07 - transfer image data to the GPU
+    glTexImage2D( GL_TEXTURE_2D, 0, STORAGE_TYPE, imageWidth, imageHeight, 0, STORAGE_TYPE, GL_UNSIGNED_BYTE, data );
+
+    fprintf( stdout, "[INFO]: %s texture map read in with handle %d\n", FILENAME, textureHandle );
+
+    // release image memory from CPU - it now lives on the GPU
+    stbi_image_free( data );
+  }
+  else
+  {
+    // load failed
+    fprintf( stderr, "[ERROR]: Could not load texture map \"%s\"\n", FILENAME );
+  }
+
+  // return generated texture handle
+  return textureHandle;
+}
+
+GLuint MPEngine::_loadAndRegisterSkyboxTexture( const char* FILENAME )
+{
+  // Our handle to the GPU texture
+  GLuint textureHandle = 0;
+
+  // Disable vertical flipping to load the image as-is
+  stbi_set_flip_vertically_on_load( true );
+
+  // Will hold image parameters after load
+  GLint imageWidth, imageHeight, imageChannels;
+
+  // Load image from file
+  GLubyte* data = stbi_load( FILENAME, &imageWidth, &imageHeight, &imageChannels, 0 );
+
+  // Check if data was read from file
+  if ( data )
+  {
+    // Determine the storage format
+    GLint STORAGE_TYPE = ( imageChannels == 4 ? GL_RGBA : GL_RGB );
+
+    // Generate a texture handle
+    glGenTextures( 1, &textureHandle );
+    // Bind it to be active
+    glBindTexture( GL_TEXTURE_2D, textureHandle );
+
+    // Set texture parameters
+    // Set texture filtering
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    // Set texture wrapping to clamp to edge
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE ); // Wrap horizontally
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE ); // Wrap vertically
+
+    // Transfer image data to the GPU
+    glTexImage2D( GL_TEXTURE_2D, 0, STORAGE_TYPE, imageWidth, imageHeight, 0, STORAGE_TYPE, GL_UNSIGNED_BYTE, data );
+
+    // Print out image info for debugging
+    fprintf( stdout, "[INFO]: Skybox texture loaded: %s (Width: %d, Height: %d, Channels: %d)\n", FILENAME, imageWidth, imageHeight, imageChannels );
+
+    // Release image memory from CPU - it now lives on the GPU
+    stbi_image_free( data );
+  }
+  else
+  {
+    // Load failed
+    fprintf( stderr, "[ERROR]: Could not load skybox texture \"%s\"\n", FILENAME );
+  }
+
+  // Return generated texture handle
+  return textureHandle;
+}
+
 //*************************************************************************************
 //
-// Private Helper FUnctions
+// Private Helper Functions
 
 void MPEngine::_computeAndSendMatrixUniforms( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx ) const
 {

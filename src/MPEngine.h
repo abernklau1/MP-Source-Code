@@ -213,6 +213,8 @@ class MPEngine final : public CSCI441::OpenGLEngine
 
     GLuint _loadAndRegisterTexture( const char* FILENAME );
 
+    GLuint _loadAndRegisterSkyboxTexture( const char* FILENAME );
+
     void mSetupTextures( );
 
     void mCleanupTextures( );
