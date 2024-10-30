@@ -501,13 +501,6 @@ void MPEngine::mCleanupTextures( )
   glDeleteTextures( 1, reinterpret_cast<const GLuint*>( &_skyTex ) );
 }
 
-void MPEngine::mCleanupTextures( )
-{
-  fprintf( stdout, "[INFO]: ...deleting textures\n" );
-  // TODO #23 - delete textures
-  glDeleteTextures( 1, reinterpret_cast<const GLuint*>( &_skyTex ) );
-}
-
 //*************************************************************************************
 //
 // Rendering / Drawing Functions - this is where the magic happens!
@@ -765,7 +758,14 @@ void MPEngine::_updateScene( )
   // Update the camera's position by adding the direction to the current position
   _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
 
-  _pFirstPersonCam->setTheta( -_angle );
+  if ( _currentCharacter == 2 )
+  {
+    _pFirstPersonCam->setTheta( _angle );
+  }
+  else
+  {
+    _pFirstPersonCam->setTheta( -_angle );
+  }
 
   _pFirstPersonCam->setPhi( 0 );
   _pFirstPersonCam->setCameraDirection( direction );
