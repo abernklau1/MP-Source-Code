@@ -91,10 +91,10 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
     switch ( key )
     {
       // Toggle cameras
-      case GLFW_KEY_T: _currentCharacter=0; break;
-      case GLFW_KEY_B: _currentCharacter=1; break;
-      case GLFW_KEY_R: _currentCharacter=2; break;
-      case GLFW_KEY_C: _currentCharacter=3; break;
+      case GLFW_KEY_Z: _currentCharacter=0; break;
+      case GLFW_KEY_X: _currentCharacter=1; break;
+      case GLFW_KEY_C: _currentCharacter=2; break;
+      case GLFW_KEY_V: _currentCharacter=3; break;
       // quit!
       case GLFW_KEY_Q:
       case GLFW_KEY_ESCAPE: setWindowShouldClose( ); break;

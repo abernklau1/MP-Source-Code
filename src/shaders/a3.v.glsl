@@ -7,6 +7,7 @@ uniform vec3 direction; //for directional light
 uniform vec3 lightColor;
 uniform vec3 spotDirectionCoords;
 uniform float spotCutoff;
+uniform vec3 spotPosition;
 uniform vec3 cameraDirection;
 uniform vec3 materialColor;
 
@@ -37,13 +38,12 @@ void main() {
     vec3 ambient = 0.3 * lightColor;
 
     //spotlight stuff
-    vec3 lightPositionEyeSpace = (mvpMatrix * vec4(vPos, 1.0)).xyz;
     vec3 spotDirection = normalize(nMatrix * spotDirectionCoords);
-    vec3 lightDirection = normalize(lightPositionEyeSpace - vec3(0.0, 0.0, 0.0)); // Assuming the spotlight is at the origin in eye space
-    float angle = dot(spotDirection, lightDirection);
+    vec3 vLight = normalize((mvpMatrix * vec4(vPos, 1.0)).xyz - spotPosition);
+    float angle = dot(spotDirection, vLight);
 
-    if (angle > cos(radians(spotCutoff))) {
-        color = vec3(1.0, 1.0, 1.0); //white if in spotlight
+    if (acos(angle) < radians(spotCutoff)) {
+        color = vec3(1.0, 1.0, 1.0);
     }
 
     //add
