@@ -32,14 +32,16 @@ horse::horse( GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint nor
   _legRotate  = 0.0f;
   _forward    = true;
 }
-
+void horse::setPosition( glm::vec3 position ) { _horsePosition = position; }
+glm::vec3 horse::getForwardDirection( ) { return _forwardDirection; }
+void horse::setForwardDirection( ) { _forwardDirection = glm::vec3( cos( _horseAngle ), 0.0f, -sin( _horseAngle ) ); }
 void horse::drawHorse( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx )
 {
-  modelMtx = glm::translate( modelMtx, _horsePosition );
+  //modelMtx = glm::translate( modelMtx, _horsePosition );
   modelMtx = glm::rotate( modelMtx, -_rotateHorseAngle, CSCI441::Y_AXIS );
   modelMtx = glm::rotate( modelMtx, _rotateHorseAngle, CSCI441::Z_AXIS );
   modelMtx = glm::rotate( modelMtx, _PI, CSCI441::X_AXIS );
-  modelMtx = glm::rotate( modelMtx, -_horseAngle, CSCI441::X_AXIS );
+  modelMtx = glm::rotate( modelMtx, _horseAngle, CSCI441::X_AXIS );
   modelMtx = glm::scale( modelMtx, glm::vec3( 0.5f, 0.5f, 0.5f ) );
   _drawHorseBody( modelMtx, viewMtx, projMtx );
 
@@ -52,8 +54,8 @@ void horse::drawHorse( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx 
 
 void horse::moveForward( )
 {
-  float nextx = _horsePosition.x + _movespeed * glm::cos( _horseAngle );
-  float nextz = _horsePosition.z + _movespeed * glm::sin( _horseAngle );
+  float nextx = _horsePosition.x - _forwardDirection.x*_movespeed * glm::cos( _horseAngle );
+  float nextz = _horsePosition.z - _forwardDirection.y*_movespeed * glm::sin( _horseAngle );
   if ( nextx < edge / 2 && nextz < edge / 2 && nextx > -edge / 2 && nextz > -edge / 2 )
   {
     _horsePosition.x = nextx;
@@ -76,8 +78,8 @@ void horse::moveForward( )
 
 void horse::moveBackward( )
 {
-  float nextx = _horsePosition.x - _movespeed * glm::cos( _horseAngle );
-  float nextz = _horsePosition.z - _movespeed * glm::sin( _horseAngle );
+  float nextx = _horsePosition.x - _forwardDirection.x*_movespeed * glm::cos( _horseAngle );
+  float nextz = _horsePosition.z - _forwardDirection.y*_movespeed * glm::sin( _horseAngle );
   if ( nextx < edge / 2 && nextz < edge / 2 && nextx > -edge / 2 && nextz > -edge / 2 )
   {
     _horsePosition.x = nextx;

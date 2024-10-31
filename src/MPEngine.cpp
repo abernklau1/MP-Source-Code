@@ -468,7 +468,7 @@ void MPEngine::mSetupScene( )
   glm::vec3 direction = glm::vec3( -1, -1, -1 );
   glm::vec3 color     = glm::vec3( 0.5, 0.5, 0.5 );
 
-  glm::vec3 spotLightPosition = glm::vec3( 0.0f, 25.0f, 0.0f );
+  glm::vec3 spotLightPosition = glm::vec3( 20.0f, 25.0f, 0.0f );
   glm::vec3 spotLightDirection = glm::vec3( 0.0f, -1.0f, 0.0f );
   GLfloat spotLightCutoff = glm::cos(glm::radians(20.5f));
   GLfloat spotLightOuterCutoff = glm::cos(glm::radians(23.5f));
@@ -575,7 +575,6 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   glDrawElements( GL_TRIANGLE_STRIP, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0 );
   //// END DRAWING THE GROUND PLANE ////
 
-  glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.cameraPosition, 1, glm::value_ptr(_pActiveCamera->getPosition()));
   //// END SKYBOX /////
   //// BEGIN DRAWING THE BUILDINGS ////
   for ( const TreeData& currentTree : _trees )
@@ -658,8 +657,8 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   _computeAndSendMatrixUniforms( modelMtx2, viewMtx, projMtx );
   _pBeing->drawPerson( modelMtx2, viewMtx, projMtx );
   glm::mat4 modelMtx3( 1.0f );
+  modelMtx3 = glm::translate( modelMtx3, _pHorse->getHorsePos() );
   _computeAndSendMatrixUniforms( modelMtx3, viewMtx, projMtx );
-
   _pHorse->drawHorse( modelMtx3, viewMtx, projMtx );
 
   //// END DRAWING TAV ////
@@ -706,7 +705,8 @@ void MPEngine::_updateScene( )
     }
     if ( _currentCharacter == 2 )
     {
-      _pHorse->moveForward( );
+      newPosition += _pHorse->getForwardDirection()*_pTav->tavSpeed;
+     // _pHorse->moveForward();
     }
   }
   if ( _keys[GLFW_KEY_S] || _keys[GLFW_KEY_DOWN] )
@@ -721,7 +721,8 @@ void MPEngine::_updateScene( )
     }
     if ( _currentCharacter == 2 )
     {
-      _pHorse->moveBackward( );
+      newPosition -= _pHorse->getForwardDirection()*_pTav->tavSpeed;
+      //_pHorse->moveBackward( );
     }
   }
   if ( _keys[GLFW_KEY_D] || _keys[GLFW_KEY_RIGHT] )
@@ -778,11 +779,11 @@ void MPEngine::_updateScene( )
   }
 
   // Update the camera's position by adding the direction to the current position
-  _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
 
+  //_pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
   if ( _currentCharacter == 2 )
   {
-    _pFirstPersonCam->setTheta( _angle );
+    _pFirstPersonCam->setTheta( -_pHorse->_horseAngle );
   }
   else
   {
@@ -793,18 +794,22 @@ void MPEngine::_updateScene( )
   _pFirstPersonCam->setCameraDirection( direction );
   if ( _currentCharacter == 2 )
   {
-    _pFirstPersonCam->setCameraPosition( position + glm::vec3( 0.1f, 4.0f, 0.0f ) );
+    _pFirstPersonCam->setCameraPosition( newPosition + glm::vec3( 0.1f, 4.0f, 0.0f ) );
   }
   else
   {
-    _pFirstPersonCam->setCameraPosition( position + glm::vec3( 0.0f, 1.0f, 0.0f ) );
+    _pFirstPersonCam->setCameraPosition( newPosition + glm::vec3( 0.0f, 1.0f, 0.0f ) );
   }
 
   //_pFirstPersonCam->updatePosition( position, direction );
   _pFirstPersonCam->recomputeOrientation( );
 
   // Update the camera's look-at point to be the player's position
+
+
+  _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
   _pArcballCam->setCameraLookAtPoint( position );
+
 
   if ( _currentCharacter == 0 )
   {
@@ -816,6 +821,11 @@ void MPEngine::_updateScene( )
     _pBeing->setForwardDirection( );
     _pBeing->setPosition( newPosition );
   }
+  if( _currentCharacter == 2 ) {
+    _pHorse->setForwardDirection();
+    _pHorse->setPosition( newPosition );
+  }
+  glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.cameraPosition, 1, glm::value_ptr(_pActiveCamera->getPosition()));
 }
 
 void MPEngine::run( )

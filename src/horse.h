@@ -36,7 +36,12 @@ class horse
 
     float _horseAngle;
 
+    void setPosition( glm::vec3 position );
+    glm::vec3 getForwardDirection( );
+    void setForwardDirection( );
+
   private:
+    glm::vec3 _forwardDirection;
     int edge;
     float _movespeed;
 

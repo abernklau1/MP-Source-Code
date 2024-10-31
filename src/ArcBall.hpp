@@ -27,6 +27,7 @@ class ArcBall final : public CSCI441::PerspectiveCamera
     glm::vec3 getCameraDirection( ) const;
 
   private:
+
 };
 
 inline ArcBall::ArcBall( GLfloat aspectRatio, GLfloat fovy, GLfloat nearClipPlane, GLfloat farClipPlane, glm::vec3 targetPosition )
@@ -36,6 +37,12 @@ inline ArcBall::ArcBall( GLfloat aspectRatio, GLfloat fovy, GLfloat nearClipPlan
 
 inline void ArcBall::recomputeOrientation( )
 {
+
+  GLfloat radius    = glm::length( mCameraPosition - mCameraLookAtPoint );
+  mCameraPosition.x = mCameraLookAtPoint.x + radius * sin( mCameraPhi ) * cos( mCameraTheta );
+  mCameraPosition.y = mCameraLookAtPoint.y + radius * cos( mCameraPhi );
+  mCameraPosition.z = mCameraLookAtPoint.z + radius * sin( mCameraPhi ) * sin( mCameraTheta );
+
   mCameraDirection = glm::normalize( mCameraLookAtPoint - mCameraPosition );
 
   mCameraUpVector = glm::vec3( 0.0f, 1.0f, 0.0f );
