@@ -5,6 +5,7 @@
 
 #include <CSCI441/OpenGLUtils.hpp>
 #include <CSCI441/objects.hpp>
+#include <iostream>
 
 horse::horse( GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normalMtxUniformLocation, GLint materialColorUniformLocation, GLint bound )
 {
@@ -26,7 +27,7 @@ horse::horse( GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint nor
   _colorTail = glm::vec3( 0.0f, 0.0f, 0.0f );
 
   // set bound
-  edge        = bound;
+  edge        = bound/2+5;
   _movespeed  = 0.1f;
   _horseAngle = 0.0f;
   _legRotate  = 0.0f;
@@ -35,74 +36,62 @@ horse::horse( GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint nor
 void horse::setPosition( glm::vec3 position ) { _horsePosition = position; }
 glm::vec3 horse::getForwardDirection( ) { return _forwardDirection; }
 void horse::setForwardDirection( ) { _forwardDirection = glm::vec3( cos( _horseAngle ), 0.0f, -sin( _horseAngle ) ); }
-void horse::drawHorse( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx )
-{
-  //modelMtx = glm::translate( modelMtx, _horsePosition );
-  modelMtx = glm::rotate( modelMtx, -_rotateHorseAngle, CSCI441::Y_AXIS );
-  modelMtx = glm::rotate( modelMtx, _rotateHorseAngle, CSCI441::Z_AXIS );
-  modelMtx = glm::rotate( modelMtx, _PI, CSCI441::X_AXIS );
-  modelMtx = glm::rotate( modelMtx, _horseAngle, CSCI441::X_AXIS );
-  modelMtx = glm::scale( modelMtx, glm::vec3( 0.5f, 0.5f, 0.5f ) );
-  _drawHorseBody( modelMtx, viewMtx, projMtx );
+void horse::drawHorse(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx ) {
+    modelMtx = glm::translate(modelMtx, _horsePosition);
+    modelMtx = glm::rotate(modelMtx, -_rotateHorseAngle, CSCI441::Y_AXIS );
+    modelMtx = glm::rotate(modelMtx, _rotateHorseAngle, CSCI441::Z_AXIS );
+    modelMtx = glm::rotate(modelMtx, _PI, CSCI441::X_AXIS );
+    modelMtx = glm::rotate(modelMtx, -_horseAngle, CSCI441::X_AXIS );
+    modelMtx = glm::scale(modelMtx, glm::vec3(0.5f, 0.5f, 0.5f));
+    _drawHorseBody(modelMtx, viewMtx, projMtx);
 
-  _drawHorseNeck( modelMtx, viewMtx, projMtx );
-  _drawHorseHead( modelMtx, viewMtx, projMtx );
-  _drawHorseTail( modelMtx, viewMtx, projMtx );
-  modelMtx = glm::rotate( modelMtx, _legRotate, CSCI441::Y_AXIS );
-  _drawHorseLegs( modelMtx, viewMtx, projMtx );
+    _drawHorseNeck(modelMtx,viewMtx,projMtx);
+    _drawHorseHead(modelMtx, viewMtx, projMtx);
+    _drawHorseTail(modelMtx, viewMtx, projMtx);
+    modelMtx = glm::rotate(modelMtx, _legRotate, CSCI441::Y_AXIS );
+    _drawHorseLegs(modelMtx, viewMtx, projMtx);
+
 }
 
-void horse::moveForward( )
-{
-  float nextx = _horsePosition.x - _forwardDirection.x*_movespeed * glm::cos( _horseAngle );
-  float nextz = _horsePosition.z - _forwardDirection.y*_movespeed * glm::sin( _horseAngle );
-  if ( nextx < edge / 2 && nextz < edge / 2 && nextx > -edge / 2 && nextz > -edge / 2 )
-  {
-    _horsePosition.x = nextx;
-    _horsePosition.z = nextz;
-  }
-  if ( _legRotate > 0.2f )
-  {
-    _forward = false;
-  }
-  else if ( _legRotate < -0.2f )
-    _forward = true;
+void horse::moveForward() {
+    float nextx = _horsePosition.x +  _movespeed * glm::cos(_horseAngle);
+    float nextz = _horsePosition.z +  _movespeed * glm::sin(_horseAngle);
+    if(nextx < edge && nextz < edge && nextx > -edge && nextz > -edge){
+        _horsePosition.x = nextx;
+        _horsePosition.z =  nextz;
+    }
+    if(_legRotate > 0.2f){
+        _forward = false;
+    } else if (_legRotate < -0.2f) _forward = true;
 
-  if ( _forward )
-  {
-    _legRotate += 0.01;
-  }
-  else
-    _legRotate -= 0.01;
+    if(_forward){
+        _legRotate += 0.01;
+    } else _legRotate -= 0.01;
 }
 
-void horse::moveBackward( )
-{
-  float nextx = _horsePosition.x - _forwardDirection.x*_movespeed * glm::cos( _horseAngle );
-  float nextz = _horsePosition.z - _forwardDirection.y*_movespeed * glm::sin( _horseAngle );
-  if ( nextx < edge / 2 && nextz < edge / 2 && nextx > -edge / 2 && nextz > -edge / 2 )
-  {
-    _horsePosition.x = nextx;
-    _horsePosition.z = nextz;
-  }
-  if ( _legRotate > 0.2f )
-  {
-    _forward = false;
-  }
-  else if ( _legRotate < -0.2f )
-    _forward = true;
+void horse::moveBackward() {
+    float nextx = _horsePosition.x -  _movespeed * glm::cos(_horseAngle);
+    float nextz = _horsePosition.z -  _movespeed * glm::sin(_horseAngle);
+    if(nextx < edge && nextz < edge && nextx > -edge && nextz > -edge){
+        _horsePosition.x = nextx;
+        _horsePosition.z = nextz;
+    }
+    if(_legRotate > 0.2f){
+        _forward = false;
+    } else if (_legRotate < -0.2f) _forward = true;
 
-  if ( _forward )
-  {
-    _legRotate += 0.01;
-  }
-  else
-    _legRotate -= 0.01;
+    if(_forward){
+        _legRotate += 0.01;
+    } else _legRotate -= 0.01;
 }
 
-void horse::turnLeft( ) { _horseAngle += 0.01; }
+void horse::turnLeft() {
+    _horseAngle += 0.01;
+}
 
-void horse::turnRight( ) { _horseAngle -= 0.01; }
+void horse::turnRight() {
+    _horseAngle -= 0.01;
+}
 
 glm::vec3 horse::getHorsePos( ) { return _horsePosition; }
 

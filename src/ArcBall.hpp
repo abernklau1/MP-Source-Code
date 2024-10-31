@@ -28,9 +28,12 @@ class ArcBall final : public CSCI441::PerspectiveCamera
 
   private:
 
+    void _clampRadius();
 };
 
-inline ArcBall::ArcBall( GLfloat aspectRatio, GLfloat fovy, GLfloat nearClipPlane, GLfloat farClipPlane, glm::vec3 targetPosition )
+void _clampRadius();
+
+inline ArcBall::ArcBall(GLfloat aspectRatio, GLfloat fovy, GLfloat nearClipPlane, GLfloat farClipPlane, glm::vec3 targetPosition )
     : CSCI441::PerspectiveCamera( aspectRatio, fovy, nearClipPlane, farClipPlane )
 {
 }
@@ -87,9 +90,19 @@ inline void ArcBall::rotate( GLfloat xAngle, GLfloat yAngle )
   recomputeOrientation( );
 }
 
-inline void ArcBall::moveForward( GLfloat movementFactor ) { }
+inline void ArcBall::moveForward(const GLfloat movementFactor) {
+    mCameraRadius -= movementFactor;    // camera "moves forward" by reducing the radius to get closer to the look at point
+    std::cout<<mCameraRadius;
+    _clampRadius();                     // ensure camera doesn't get too close
+    recomputeOrientation();             // update view matrix
+}
 
-inline void ArcBall::moveBackward( GLfloat movementFactor ) { }
+inline void ArcBall::moveBackward(const GLfloat movementFactor) {
+    mCameraRadius += movementFactor;    // camera "moves backward" by increasing the radius to get further away from the look at point
+    _clampRadius();                     // ensure camera doesn't get too far away
+    recomputeOrientation();             // update view matrix
+}
+
 
 inline void ArcBall::setCameraLookAtPoint( glm::vec3 targetPosition )
 {
@@ -101,6 +114,10 @@ inline void ArcBall::setCameraPosition( glm::vec3 targetPosition )
 {
   mCameraPosition = targetPosition;
   recomputeOrientation( );
+}
+
+inline void ArcBall::_clampRadius() {
+    mCameraRadius = glm::clamp(mCameraRadius, 2.0f, 30.0f);
 }
 
 inline glm::vec3 ArcBall::getCameraDirection( ) const { return mCameraDirection; }

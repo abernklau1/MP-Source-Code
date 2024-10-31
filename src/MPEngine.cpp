@@ -49,12 +49,14 @@ void MPEngine::handleKeyEvent( GLint key, GLint action )
     if ( _keys[GLFW_KEY_Y] && _pActiveCamera == _pFreeCam )
     {
       _pFreeCam->moveForward( 0.1 );
-      _pArcballCam->setCameraPosition( _pFreeCam->getPosition( ) );
+      _pArcballCam->setPosition( _pFreeCam->getPosition( ) );
+      _pArcballCam->recomputeOrientation();
     }
     if ( _keys[GLFW_KEY_H] && _pActiveCamera == _pFreeCam )
     {
       _pFreeCam->moveBackward( 0.1 );
-      _pArcballCam->setCameraPosition( _pFreeCam->getPosition( ) );
+      _pArcballCam->setPosition( _pFreeCam->getPosition( ) );
+      _pArcballCam->recomputeOrientation();
     }
     if ( key == GLFW_KEY_1 )
     {
@@ -147,18 +149,12 @@ void MPEngine::handleCursorPositionEvent( glm::vec2 currMousePosition )
   // if the left mouse button is being held down while the mouse is moving
   if ( _leftMouseButtonState == GLFW_PRESS )
   {
-    if ( _keys[GLFW_KEY_LEFT_SHIFT] || _keys[GLFW_KEY_RIGHT_SHIFT] )
-    {
       // Zoom based on vertical mouse movement
       if ( _pActiveCamera == _pArcballCam )
       {
 
-        float zoomAmount = ( currMousePosition.y - _mousePosition.y ) * 0.01f;
-        _pArcballCam->zoom( zoomAmount );
       }
-    }
-    else
-    {
+
       // rotate the camera by the distance the mouse moved
       if ( _pActiveCamera == _pArcballCam )
       {
@@ -169,7 +165,6 @@ void MPEngine::handleCursorPositionEvent( glm::vec2 currMousePosition )
 
         _pFreeCam->rotate( ( currMousePosition.x - _mousePosition.x ) * 0.005f, ( _mousePosition.y - currMousePosition.y ) * 0.005f );
       }
-    }
   }
 
   // update the mouse position
@@ -250,7 +245,7 @@ void MPEngine::mSetupBuffers( )
                        _lightingShaderUniformLocations.mvpMatrix,
                        _lightingShaderUniformLocations.nMatrix,
                        _lightingShaderUniformLocations.materialColor,
-                       GRID_WIDTH + 5.0f );
+                       GRID_WIDTH);
 
   _pObjModel = new CSCI441::ModelLoader( );
   //_pObjModel->enableAutoGenerateNormals( );
@@ -414,7 +409,7 @@ void MPEngine::_generateEnvironment( )
 
 void MPEngine::mSetupScene( )
 {
-  _pArcballCam     = new ArcBall( );
+  _pArcballCam     = new CSCI441::ArcballCam( );
   _pFreeCam        = new FreeCam( );
   _pFirstPersonCam = new FirstPerson( );
   glm::vec3 targetPosition;
@@ -432,14 +427,14 @@ void MPEngine::mSetupScene( )
   }
 
   // Define an offset vector for the camera
-  _cameraOffset = glm::vec3( 0.0f, 5.0f, 10.0f );
+  _cameraOffset = glm::vec3( 5.0f, -20.0f, 10.0f );
 
   // Set the camera's look-at point to be the player's position
-  _pArcballCam->setCameraLookAtPoint( targetPosition );
-
+  _pArcballCam->setLookAtPoint( targetPosition );
+  _pArcballCam->recomputeOrientation();
   // Set the camera's position to be offset from the player's position
-  _pArcballCam->setCameraPosition( targetPosition + _cameraOffset );
-
+  _pArcballCam->setPosition( targetPosition + _cameraOffset );
+  _pArcballCam->recomputeOrientation();
   glm::vec3 arcballDirection = glm::normalize( ( targetPosition + _cameraOffset ) - targetPosition );
 
   _pArcballCam->setTheta( atan2( arcballDirection.z, arcballDirection.x ) );
@@ -657,7 +652,6 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   _computeAndSendMatrixUniforms( modelMtx2, viewMtx, projMtx );
   _pBeing->drawPerson( modelMtx2, viewMtx, projMtx );
   glm::mat4 modelMtx3( 1.0f );
-  modelMtx3 = glm::translate( modelMtx3, _pHorse->getHorsePos() );
   _computeAndSendMatrixUniforms( modelMtx3, viewMtx, projMtx );
   _pHorse->drawHorse( modelMtx3, viewMtx, projMtx );
 
@@ -666,6 +660,18 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
 
 void MPEngine::_updateScene( )
 {
+    if( _keys[GLFW_KEY_SPACE] && _pActiveCamera == _pArcballCam) {
+
+        // go backward if shift held down
+        if( _keys[GLFW_KEY_LEFT_SHIFT] || _keys[GLFW_KEY_RIGHT_SHIFT] ) {
+            _pArcballCam->moveBackward(0.2);
+        }
+            // go forward
+        else {
+            std::cout<<"HERE";
+            _pArcballCam->moveForward(0.2);
+        }
+    }
   // Define the boundaries of the grid
   const GLfloat minX = LEFT_END_POINT;
   const GLfloat maxX = RIGHT_END_POINT;
@@ -705,8 +711,7 @@ void MPEngine::_updateScene( )
     }
     if ( _currentCharacter == 2 )
     {
-      newPosition += _pHorse->getForwardDirection()*_pTav->tavSpeed;
-     // _pHorse->moveForward();
+        _pHorse->moveForward();
     }
   }
   if ( _keys[GLFW_KEY_S] || _keys[GLFW_KEY_DOWN] )
@@ -721,8 +726,7 @@ void MPEngine::_updateScene( )
     }
     if ( _currentCharacter == 2 )
     {
-      newPosition -= _pHorse->getForwardDirection()*_pTav->tavSpeed;
-      //_pHorse->moveBackward( );
+      _pHorse->moveBackward( );
     }
   }
   if ( _keys[GLFW_KEY_D] || _keys[GLFW_KEY_RIGHT] )
@@ -783,7 +787,7 @@ void MPEngine::_updateScene( )
   //_pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
   if ( _currentCharacter == 2 )
   {
-    _pFirstPersonCam->setTheta( -_pHorse->_horseAngle );
+    _pFirstPersonCam->setTheta( _pHorse->_horseAngle );
   }
   else
   {
@@ -807,9 +811,9 @@ void MPEngine::_updateScene( )
   // Update the camera's look-at point to be the player's position
 
 
-  _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
-  _pArcballCam->setCameraLookAtPoint( position );
-
+  _pArcballCam->setPosition( _pArcballCam->getPosition( ) + direction );
+  _pArcballCam->setLookAtPoint( position );
+  _pArcballCam->recomputeOrientation();
 
   if ( _currentCharacter == 0 )
   {
@@ -823,7 +827,6 @@ void MPEngine::_updateScene( )
   }
   if( _currentCharacter == 2 ) {
     _pHorse->setForwardDirection();
-    _pHorse->setPosition( newPosition );
   }
   glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.cameraPosition, 1, glm::value_ptr(_pActiveCamera->getPosition()));
 }
@@ -985,7 +988,7 @@ void MPEngine::_computeAndSendMatrixUniforms( glm::mat4 modelMtx, glm::mat4 view
 
   _lightingShaderProgram->setProgramUniform( _lightingShaderUniformLocations.nMatrix, nMatrix );
 
-  glm::vec3 cameraDirection = _pArcballCam->getCameraDirection( );
+  glm::vec3 cameraDirection = _pArcballCam->getLookAtPoint() - _pArcballCam->getPosition();
   _lightingShaderProgram->setProgramUniform( _lightingShaderUniformLocations.cameraDirection, cameraDirection );
 
   glm::vec3 cameraPosition = _pArcballCam->getPosition( );
