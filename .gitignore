@@ -1,5 +1,7 @@
 .DS_Store
-.vs_code
-./src/build
-./src/cmake-build-debug
-./.idea
+.vscode
+/src/build
+/src/cmake-build-debug
+/src/.idea
+.idea
+cmake-build-debug
