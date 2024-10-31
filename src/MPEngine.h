@@ -178,6 +178,13 @@ class MPEngine final : public CSCI441::OpenGLEngine
         GLint cameraDirection;
         GLint cameraPosition;
 
+        GLint spotLightPosition;
+        GLint spotLightDirection;
+        GLint spotLightCutoff;
+        GLint spotLightOuterCutoff;
+
+
+
     } _lightingShaderUniformLocations;
 
     /// \desc stores the locations of all of our shader attributes

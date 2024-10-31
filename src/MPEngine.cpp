@@ -215,6 +215,11 @@ void MPEngine::mSetupShaders( )
   _lightingShaderUniformLocations.cameraPosition  = _lightingShaderProgram->getUniformLocation( "cameraPosition" );
   _lightingShaderUniformLocations.cameraDirection = _lightingShaderProgram->getUniformLocation( "cameraDirection" );
 
+  _lightingShaderUniformLocations.spotLightCutoff = _lightingShaderProgram->getUniformLocation( "spotLightCutoff" );
+  _lightingShaderUniformLocations.spotLightDirection = _lightingShaderProgram->getUniformLocation( "spotLightDirection" );
+  _lightingShaderUniformLocations.spotLightPosition = _lightingShaderProgram->getUniformLocation( "spotLightPosition" );
+  _lightingShaderUniformLocations.spotLightOuterCutoff = _lightingShaderProgram->getUniformLocation( "spotLightOuterCutoff" );
+
   _lightingShaderAttributeLocations.vPos = _lightingShaderProgram->getAttributeLocation( "vPos" );
   // assign attributes
   _lightingShaderAttributeLocations.vNormal = _lightingShaderProgram->getAttributeLocation( "vNormal" );
@@ -248,7 +253,7 @@ void MPEngine::mSetupBuffers( )
                        GRID_WIDTH + 5.0f );
 
   _pObjModel = new CSCI441::ModelLoader( );
-  _pObjModel->enableAutoGenerateNormals( );
+  //_pObjModel->enableAutoGenerateNormals( );
   if ( _pObjModel->loadModelFile( "models/plant.obj" ) )
   {
     _pObjModel->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
@@ -261,7 +266,7 @@ void MPEngine::mSetupBuffers( )
   }
 
   _pObjModelB = new CSCI441::ModelLoader( );
-  _pObjModelB->enableAutoGenerateNormals( );
+  //_pObjModelB->enableAutoGenerateNormals( );
   if ( _pObjModelB->loadModelFile( "models/bunny.obj" ) )
   {
     _pObjModelB->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
@@ -461,7 +466,20 @@ void MPEngine::mSetupScene( )
 
   // TODO #6: set lighting uniforms
   glm::vec3 direction = glm::vec3( -1, -1, -1 );
-  glm::vec3 color     = glm::vec3( 1, 1, 1 );
+  glm::vec3 color     = glm::vec3( 0.5, 0.5, 0.5 );
+
+  glm::vec3 spotLightPosition = glm::vec3( 0.0f, 25.0f, 0.0f );
+  glm::vec3 spotLightDirection = glm::vec3( 0.0f, -1.0f, 0.0f );
+  GLfloat spotLightCutoff = glm::cos(glm::radians(20.5f));
+  GLfloat spotLightOuterCutoff = glm::cos(glm::radians(23.5f));
+
+  glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.spotLightPosition, 1, glm::value_ptr( spotLightPosition ) );
+
+  glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.spotLightDirection, 1, glm::value_ptr( spotLightDirection ) );
+
+  glProgramUniform1f(_lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.spotLightOuterCutoff,  spotLightOuterCutoff );
+
+  glProgramUniform1f(_lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.spotLightCutoff,  spotLightCutoff );
 
   glProgramUniform3fv( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.direction, 1, glm::value_ptr( direction ) );
 
@@ -557,6 +575,7 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   glDrawElements( GL_TRIANGLE_STRIP, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0 );
   //// END DRAWING THE GROUND PLANE ////
 
+  glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.cameraPosition, 1, glm::value_ptr(_pActiveCamera->getPosition()));
   //// END SKYBOX /////
   //// BEGIN DRAWING THE BUILDINGS ////
   for ( const TreeData& currentTree : _trees )
@@ -632,11 +651,14 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   // TODO: rotate tav without arcball
 
   // draw our Tav now
+  _computeAndSendMatrixUniforms( modelMtx1, viewMtx, projMtx );
   _pTav->drawTav( modelMtx1, viewMtx, projMtx );
   glm::mat4 modelMtx2( 1.0f );
   modelMtx2 = glm::translate( modelMtx2, _pBeing->getPosition( ) );
+  _computeAndSendMatrixUniforms( modelMtx2, viewMtx, projMtx );
   _pBeing->drawPerson( modelMtx2, viewMtx, projMtx );
   glm::mat4 modelMtx3( 1.0f );
+  _computeAndSendMatrixUniforms( modelMtx3, viewMtx, projMtx );
 
   _pHorse->drawHorse( modelMtx3, viewMtx, projMtx );
 

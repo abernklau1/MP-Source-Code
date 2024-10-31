@@ -21,12 +21,12 @@ uniform float pointLightQuadratic;
 // Spot light uniforms
 uniform vec3 spotLightPosition;
 uniform vec3 spotLightDirection;
-uniform vec3 spotLightColor;
+// uniform vec3 spotLightColor;
 uniform float spotLightCutoff;      // Cosine of the inner cutoff angle
 uniform float spotLightOuterCutoff; // Cosine of the outer cutoff angle
-uniform float spotLightConstant;
-uniform float spotLightLinear;
-uniform float spotLightQuadratic;
+//uniform float spotLightConstant;
+//uniform float spotLightLinear;
+//uniform float spotLightQuadratic;
 
 uniform vec3 cameraDirection;
 uniform vec3 cameraPosition;
@@ -51,6 +51,16 @@ void main( )
   // Transform normal to world space and normalize
   vec3 transformedNormal = normalize( nMatrix * vNormal );
 
+  // compute the vec from the light to the vertex
+  vec3 lightToVertex = normalize(spotLightPosition-worldPos);
+
+  // compute the cos of the angle between the light dir and light to vertex
+  float myTheta = dot(lightToVertex, normalize(-spotLightDirection));
+
+  // compute edge effects
+  float epsilon = spotLightCutoff - spotLightOuterCutoff;
+  float spotIntensity = clamp((myTheta-spotLightOuterCutoff)/epsilon, 0.0, 1.0);
+
   // Compute eye direction
   vec3 eyeDirection = normalize( cameraPosition - worldPos );
 
@@ -58,11 +68,17 @@ void main( )
   vec3 lightVector = normalize( -direction );
 
   // Ambient component
-  vec3 ambient = 0.3 * lightColor * materialColor;
+  vec3 ambient = 0.05 * lightColor * materialColor;
 
-  // Diffuse component
+  // Diffuse component for reg light
   float diffuseFactor = max( dot( transformedNormal, lightVector ), 0.0 );
   vec3 diffuse        = diffuseFactor * lightColor * materialColor;
+
+  // Diffuse component for spotlight
+  float diffuseFactor2 = max( dot( transformedNormal, lightToVertex ), 0.0 );
+  vec3 diffuse2 = diffuseFactor2*vec3(1.0,1.0,1.0)*materialColor;
+
+
 
   // Specular component
   vec3 reflection      = reflect( -lightVector, transformedNormal );
@@ -70,8 +86,26 @@ void main( )
   float specularFactor = pow( max( dot( reflection, eyeDirection ), 0.0 ), shininess );
   vec3 specular        = specularFactor * lightColor; // Specular color doesn't depend on material color
 
+  // Specular for spotlight
+  vec3 reflection2      = reflect( -lightToVertex, transformedNormal );
+  float shininess2      = 24.0; // Adjust as needed
+  float specularFactor2 = pow( max( dot( reflection2, eyeDirection ), 0.0 ), shininess2 ); // should this be eye direction
+  vec3 specular2 = specularFactor2 * vec3(1.0,1.0,1.0); // Specular color doesn't depend on material color
+
+  //add spotlight intensity
+    if(myTheta>=spotLightOuterCutoff){
+      diffuse2 = diffuse2*spotIntensity*10;
+      specular2 = specular2*spotIntensity*10;
+    }else{
+        diffuse2= vec3(0.0,0.0,0.0);
+        specular2=vec3(0.0,0.0,0.0);
+    }
+
+
+
+
   // Combine components
-  color = ambient + diffuse + specular;
+  color = ambient + diffuse + specular + specular2 + diffuse2;
 }
 
 // void main( )

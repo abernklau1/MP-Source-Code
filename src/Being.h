@@ -59,6 +59,8 @@ class Being
         GLint normalMtx;
         /// \desc location of the material diffuse color
         GLint materialColor;
+
+        GLint modelMtx;
     } _shaderProgramUniformLocations;
 
     /// \desc angle to rotate our plane at

@@ -154,6 +154,7 @@ void Tav::_drawTavStaff( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMt
 
 void Tav::_computeAndSendMatrixUniforms( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx ) const
 {
+  glProgramUniformMatrix4fv( _shaderProgramHandle, _shaderProgramUniformLocations.modelMtx, 1, GL_FALSE, glm::value_ptr( modelMtx ) );
   glm::mat4 mvpMtx = projMtx * viewMtx * modelMtx;
   glProgramUniformMatrix4fv( _shaderProgramHandle, _shaderProgramUniformLocations.mvpMtx, 1, GL_FALSE, glm::value_ptr( mvpMtx ) );
   glm::mat3 normalMtx = glm::mat3( glm::transpose( glm::inverse( modelMtx ) ) );

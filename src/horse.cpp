@@ -208,6 +208,9 @@ void horse::_computeAndSendMatrixUniforms( glm::mat4 modelMtx, glm::mat4 viewMtx
   // precompute the Model-View-Projection matrix on the CPU
   glm::mat4 mvpMtx = projMtx * viewMtx * modelMtx;
   // then send it to the shader on the GPU to apply to every vertex
+
+  glProgramUniformMatrix4fv( _shaderProgramHandle, _shaderProgramUniformLocations.modelMtx, 1, GL_FALSE, glm::value_ptr(modelMtx) );
+
   glProgramUniformMatrix4fv( _shaderProgramHandle, _shaderProgramUniformLocations.mvpMtx, 1, GL_FALSE, glm::value_ptr( mvpMtx ) );
 
   glm::mat3 normalMtx = glm::mat3( glm::transpose( glm::inverse( modelMtx ) ) );

@@ -61,6 +61,8 @@ class Tav
         GLint normalMtx;
         /// \desc location of the material diffuse color
         GLint materialColor;
+
+        GLint modelMtx;
     } _shaderProgramUniformLocations;
 
     glm::vec3 _position;
