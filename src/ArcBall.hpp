@@ -92,7 +92,6 @@ inline void ArcBall::rotate( GLfloat xAngle, GLfloat yAngle )
 
 inline void ArcBall::moveForward(const GLfloat movementFactor) {
     mCameraRadius -= movementFactor;    // camera "moves forward" by reducing the radius to get closer to the look at point
-    std::cout<<mCameraRadius;
     _clampRadius();                     // ensure camera doesn't get too close
     recomputeOrientation();             // update view matrix
 }

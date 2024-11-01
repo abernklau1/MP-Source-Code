@@ -392,7 +392,7 @@ void MPEngine::_generateEnvironment( )
 
 void MPEngine::mSetupScene( )
 {
-  _pArcballCam     = new CSCI441::ArcballCam( );
+  _pArcballCam     = new ArcBall( );
   _pFreeCam        = new FreeCam( );
   _pFirstPersonCam = new FirstPerson( );
   glm::vec3 targetPosition;
@@ -415,10 +415,10 @@ void MPEngine::mSetupScene( )
   _cameraOffset = glm::vec3( 5.0f, -20.0f, 10.0f );
 
   // Set the camera's look-at point to be the player's position
-  _pArcballCam->setLookAtPoint( targetPosition );
+  _pArcballCam->setCameraLookAtPoint( targetPosition );
   _pArcballCam->recomputeOrientation();
   // Set the camera's position to be offset from the player's position
-  _pArcballCam->setPosition( targetPosition + _cameraOffset );
+  _pArcballCam->setCameraPosition( targetPosition + _cameraOffset );
   _pArcballCam->recomputeOrientation();
   glm::vec3 arcballDirection = glm::normalize( ( targetPosition + _cameraOffset ) - targetPosition );
 
@@ -659,7 +659,7 @@ void MPEngine::_updateScene( )
         // go backward if shift held down
         if( _keys[GLFW_KEY_LEFT_SHIFT] || _keys[GLFW_KEY_RIGHT_SHIFT] ) {
             if(_pActiveCamera == _pArcballCam){
-                _pArcballCam->moveBackward(0.2);
+                _pArcballCam->zoom(0.2);
             } else {
                 _pFreeCam->moveBackward(0.2);
             }
@@ -668,7 +668,7 @@ void MPEngine::_updateScene( )
             // go forward
         else {
             if(_pActiveCamera == _pArcballCam){
-                _pArcballCam->moveForward(0.2);
+                _pArcballCam->zoom(-0.2);
 
             } else {
                 _pFreeCam->moveForward(0.2);
@@ -854,8 +854,8 @@ void MPEngine::_updateScene( )
   // Update the camera's look-at point to be the player's position
 
 
-  _pArcballCam->setPosition( _pArcballCam->getPosition( ) + direction );
-  _pArcballCam->setLookAtPoint( position );
+  _pArcballCam->setCameraPosition( _pArcballCam->getPosition( ) + direction );
+  _pArcballCam->setCameraLookAtPoint( position );
   _pArcballCam->recomputeOrientation();
 
   if ( _currentCharacter == 0 )

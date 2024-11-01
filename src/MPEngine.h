@@ -1,5 +1,4 @@
 #include "ArcBall.hpp"
-#include "ArcballCam.hpp"
 #include "Being.h"
 #include "FirstPerson.hpp"
 #include "FreeCam.h"
@@ -89,7 +88,7 @@ class MPEngine final : public CSCI441::OpenGLEngine
     GLint _leftMouseButtonState;
 
     /// \desc the static fixed camera in our world
-    CSCI441::ArcballCam* _pArcballCam;
+    ArcBall* _pArcballCam;
     CSCI441::PerspectiveCamera* _pActiveCamera;
 
     /// \desc pair of values to store the speed the camera can move/rotate.
