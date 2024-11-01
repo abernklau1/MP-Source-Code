@@ -3,3 +3,4 @@
 src/build
 src/cmake-build-debug
 src/.idea
+cmake-build-debug
