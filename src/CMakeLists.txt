@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(SOURCE_FILES main.cpp MPEngine.cpp MPEngine.h Tav.cpp Tav.h ArcBall.hpp Being.h Being.cpp FreeCam.h
         FreeCam.cpp
         horse.cpp
-        horse.h)
+        horse.h Car.cpp)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

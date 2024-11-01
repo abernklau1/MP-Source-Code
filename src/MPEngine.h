@@ -5,6 +5,7 @@
 #include "FreeCam.h"
 #include "Tav.h"
 #include "horse.h"
+#include "Car.h"
 
 #include <CSCI441/ModelLoader.hpp>
 #include <CSCI441/OpenGLEngine.hpp>
@@ -98,6 +99,7 @@ class MPEngine final : public CSCI441::OpenGLEngine
     Tav* _pTav;
     Being* _pBeing;
     horse* _pHorse;
+    Car* _pCar;
     int _currentCharacter = 0;
 
     GLint _skyTex;
@@ -183,6 +185,8 @@ class MPEngine final : public CSCI441::OpenGLEngine
         GLint spotLightDirection;
         GLint spotLightCutoff;
         GLint spotLightOuterCutoff;
+
+        GLint pointLightPosition;
 
 
 

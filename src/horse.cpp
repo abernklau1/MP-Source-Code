@@ -42,7 +42,7 @@ void horse::drawHorse(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx )
     modelMtx = glm::rotate(modelMtx, _rotateHorseAngle, CSCI441::Z_AXIS );
     modelMtx = glm::rotate(modelMtx, _PI, CSCI441::X_AXIS );
     modelMtx = glm::rotate(modelMtx, -_horseAngle, CSCI441::X_AXIS );
-    modelMtx = glm::scale(modelMtx, glm::vec3(0.5f, 0.5f, 0.5f));
+    modelMtx = glm::scale(modelMtx, glm::vec3(0.3f, 0.3f, 0.3f));
     _drawHorseBody(modelMtx, viewMtx, projMtx);
 
     _drawHorseNeck(modelMtx,viewMtx,projMtx);
