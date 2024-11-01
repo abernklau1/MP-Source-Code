@@ -228,10 +228,10 @@ void MPEngine::mSetupBuffers( )
                        _lightingShaderUniformLocations.materialColor,
                        GRID_WIDTH);
     _pCar =
-            new Car( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor );
+            new Car( _lightingShaderProgram->getShaderProgramHandle( ), _lightingShaderUniformLocations.mvpMatrix, _lightingShaderUniformLocations.nMatrix, _lightingShaderUniformLocations.materialColor, GRID_WIDTH/2 +5 );
 
   _pObjModel = new CSCI441::ModelLoader( );
-  //_pObjModel->enableAutoGenerateNormals( );
+  _pObjModel->enableAutoGenerateNormals( );
   if ( _pObjModel->loadModelFile( "models/plant.obj" ) )
   {
     _pObjModel->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
@@ -244,7 +244,7 @@ void MPEngine::mSetupBuffers( )
   }
 
   _pObjModelB = new CSCI441::ModelLoader( );
-  //_pObjModelB->enableAutoGenerateNormals( );
+  _pObjModelB->enableAutoGenerateNormals( );
   if ( _pObjModelB->loadModelFile( "models/bunny.obj" ) )
   {
     _pObjModelB->setAttributeLocations( _lightingShaderAttributeLocations.vPos, _lightingShaderAttributeLocations.vNormal );
@@ -446,7 +446,7 @@ void MPEngine::mSetupScene( )
 
   // TODO #6: set lighting uniforms
   glm::vec3 direction = glm::vec3( -1, -1, -1 );
-  glm::vec3 color     = glm::vec3( 0.5, 0.5, 0.5 );
+  glm::vec3 color     = glm::vec3( 1, 1, 1 );
 
   glm::vec3 spotLightPosition = glm::vec3( 20.0f, 25.0f, 0.0f );
   glm::vec3 spotLightDirection = glm::vec3( 0.0f, -1.0f, 0.0f );
@@ -645,8 +645,9 @@ void MPEngine::_renderScene( glm::mat4 viewMtx, glm::mat4 projMtx ) const
   _computeAndSendMatrixUniforms( lightingMat, viewMtx, projMtx );
   _pHorse->drawHorse( modelMtx3, viewMtx, projMtx );
   glm::mat4 modelMtx4( 1.0f );
-  glm::mat4 lightingMat2 = glm::translate(modelMtx4, _pHorse->getHorsePos());
-  _pCar->drawCar(lightingMat2, viewMtx, projMtx);
+  glm::mat4 lightingMat2 = glm::translate(modelMtx4, _pCar->getPosition());
+  _pCar->drawCar(modelMtx4, viewMtx, projMtx);
+  _computeAndSendMatrixUniforms(lightingMat2, viewMtx, projMtx);
 
   //// END DRAWING TAV ////
 }
@@ -700,18 +701,30 @@ void MPEngine::_updateScene( )
       currentPosition = _pCar->getPosition();
   }
 
+
   // Calculate the new position based on input
   glm::vec3 newPosition = currentPosition;
-
+  float edge = GRID_WIDTH /2.0f +5.0f;
   if ( _keys[GLFW_KEY_W] || _keys[GLFW_KEY_UP] )
   {
     if ( _currentCharacter == 0 )
     {
-      newPosition += _pTav->getForwardDirection( ) * _pTav->tavSpeed;
+        float nextx = newPosition.x + _pTav->getForwardDirection().x * _pTav->tavSpeed;
+        float nextz = newPosition.z + _pTav->getForwardDirection().z * _pTav->tavSpeed;
+        printf("my currrent position is: %f,%f,%f\n", currentPosition.x, currentPosition.y, currentPosition.z);
+        std::cout<<edge<<"x "<< nextx<<"z "<<nextz<<std::endl;
+        if(nextx < edge && nextz < edge && nextx > -edge && nextz > -edge) {
+            newPosition += _pTav->getForwardDirection() * _pTav->tavSpeed;
+        }
     }
     if ( _currentCharacter == 1 )
     {
-      newPosition += _pBeing->getForwardDirection( ) * _pTav->tavSpeed;
+        float nextx = newPosition.x + _pBeing->getForwardDirection().x * _pTav->tavSpeed;
+        float nextz = newPosition.z + _pBeing->getForwardDirection().z * _pTav->tavSpeed;
+
+        if(nextx < edge && nextz < edge && nextx > -edge && nextz > -edge) {
+            newPosition += _pBeing->getForwardDirection() * _pTav->tavSpeed;
+        }
     }
     if ( _currentCharacter == 2 )
     {
@@ -728,11 +741,19 @@ void MPEngine::_updateScene( )
   {
     if ( _currentCharacter == 0 )
     {
-      newPosition -= _pTav->getForwardDirection( ) * _pTav->tavSpeed;
+        float nextx = newPosition.x - _pTav->getForwardDirection().x * _pTav->tavSpeed;
+        float nextz = newPosition.z - _pTav->getForwardDirection().z * _pTav->tavSpeed;
+        if(nextx < edge && nextz < edge && nextx > -edge && nextz > -edge) {
+            newPosition -= _pTav->getForwardDirection() * _pTav->tavSpeed;
+        }
     }
     if ( _currentCharacter == 1 )
     {
-      newPosition -= _pBeing->getForwardDirection( ) * _pTav->tavSpeed;
+        float nextx = newPosition.x - _pBeing->getForwardDirection().x * _pTav->tavSpeed;
+        float nextz = newPosition.z - _pBeing->getForwardDirection().z * _pTav->tavSpeed;
+        if(nextx < edge && nextz < edge && nextx > -edge && nextz > -edge) {
+            newPosition -= _pBeing->getForwardDirection() * _pTav->tavSpeed;
+        }
     }
     if ( _currentCharacter == 2 )
     {
