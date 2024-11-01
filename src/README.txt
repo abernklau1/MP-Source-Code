@@ -7,10 +7,11 @@ explore our magical world filled with bunnies, trees, and even a cabin.
 Controls:
 W & S - forward and backward
 A & D - left and right
-Y & H - zoom in and out
+Y & H - zoom in and out (w/ cams)
 Drag mouse to navigate world
 1 - arcball cam
 2 - free cam
+3 - first person viewport
 
 Switching character controls:
 Z = tav
@@ -34,8 +35,8 @@ No bugs currently
 
 Teammate contributions:
 All: character drawing/movement
-Doofenshmirtz - Worked on point light calculations, debugging, attenuation
-Tav - Arcball, freecam, first person cam, skybox texture
+Doofenshmirtz - Point light calculations, debugging, attenuation
+Tav - Arcball, freecam, first person cam, skybox texture, lighting
 Glass of Soda - Arcball, freecam, first person cam, spotlight, point light
 Gumpop - arcball, freecam, lighting errors, designing the skybox, skybox texture, designing the world and loading obj files
 
