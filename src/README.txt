@@ -33,10 +33,11 @@ build and run
 No bugs currently
 
 Teammate contributions:
-Doofenshmirtz - Worked on point light calculations, character movements
-Tav - Arcball, freecam, first person cam, characters
+All: character drawing/movement
+Doofenshmirtz - Worked on point light calculations, debugging, attenuation
+Tav - Arcball, freecam, first person cam, skybox texture
 Glass of Soda - Arcball, freecam, first person cam, spotlight, point light
-Gumpop - arcball, freecam, lighting errors,
+Gumpop - arcball, freecam, lighting errors, designing the skybox, skybox texture, designing the world and loading obj files
 
 How long did this assignment take you?: 4 hrs
 How much did the lab help you for this assignment?: 8
